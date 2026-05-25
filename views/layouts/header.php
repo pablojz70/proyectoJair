@@ -13,6 +13,7 @@
     $controller = $GLOBALS['controller'] ?? 'dashboard';
     $action = $GLOBALS['action'] ?? 'index';
     ?>
+    <div id="sidebarOverlay"></div>
     <div class="d-flex" id="wrapper">
         <div class="sidebar sidebar-gradient" id="sidebar">
             <div class="sidebar-header p-3 border-bottom border-secondary">
@@ -154,7 +155,7 @@
                 <button class="btn btn-sm btn-outline-secondary" id="sidebarToggle">
                     <i class="bi bi-list"></i>
                 </button>
-                <span class="ms-3 fw-bold">
+                <span class="ms-2 fw-bold text-truncate" style="max-width:40vw">
                     <?php
                     $iconMap = [
                         'dashboard' => 'dashboard',
@@ -174,10 +175,15 @@
                     <img src="<?= BASE_URL ?>/imagen/<?= $icon ?>.png" class="sidebar-icon me-1">
                     <?= h($pageTitle ?? 'Inicio') ?>
                 </span>
-                <div class="ms-auto text-muted small">
-                    <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon-sm me-1"><?= h(Session::get('user_name')) ?>
-                    <span class="badge bg-<?= Session::isAdmin() ? 'danger' : 'primary' ?> ms-1">
+                <div class="ms-auto text-muted small d-flex align-items-center gap-1">
+                    <span class="d-none d-sm-inline">
+                        <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon-sm me-1"><?= h(Session::get('user_name')) ?>
+                    </span>
+                    <span class="badge bg-<?= Session::isAdmin() ? 'danger' : 'primary' ?> ms-1 d-none d-sm-inline">
                         <?= Session::isAdmin() ? 'Admin' : 'Vendedor' ?>
+                    </span>
+                    <span class="badge bg-<?= Session::isAdmin() ? 'danger' : 'primary' ?> d-sm-none" title="<?= h(Session::get('user_name')) ?>">
+                        <i class="bi bi-person"></i>
                     </span>
                 </div>
             </nav>
