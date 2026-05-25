@@ -10,7 +10,7 @@ class Sale
 
     public function getAll($userId = null, $filters = [])
     {
-        $sql = "SELECT s.*, c.full_name as client_name, e.name as employee_name FROM sales s JOIN clients c ON c.id = s.client_id LEFT JOIN employees e ON e.id = s.employee_id WHERE 1=1";
+        $sql = "SELECT s.*, c.full_name as client_name, e.name as employee_name FROM sales s JOIN clients c ON c.id = s.client_id LEFT JOIN users e ON e.id = s.employee_id WHERE 1=1";
         $params = [];
 
         if ($userId && !Session::isAdmin()) {
@@ -51,7 +51,7 @@ class Sale
 
     public function findById($id)
     {
-        $stmt = $this->db->prepare("SELECT s.*, c.full_name as client_name, e.name as employee_name FROM sales s JOIN clients c ON c.id = s.client_id LEFT JOIN employees e ON e.id = s.employee_id WHERE s.id = ?");
+        $stmt = $this->db->prepare("SELECT s.*, c.full_name as client_name, e.name as employee_name FROM sales s JOIN clients c ON c.id = s.client_id LEFT JOIN users e ON e.id = s.employee_id WHERE s.id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
@@ -139,16 +139,27 @@ class Sale
     {
         $sql = "SELECT COUNT(*) as count, COALESCE(SUM(total_usd),0) as total_usd, COALESCE(SUM(total_bs),0) as total_bs FROM sales WHERE ";
         $params = [];
+        $now = new DateTime();
 
         switch ($period) {
             case 'today':
-                $sql .= "DATE(created_at) = CURDATE()";
+                $sql .= "created_at >= ? AND created_at < ?";
+                $params[] = $now->format('Y-m-d 00:00:00');
+                $params[] = $now->format('Y-m-d 23:59:59');
                 break;
             case 'week':
-                $sql .= "YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1)";
+                $monday = (clone $now)->modify('monday this week')->setTime(0, 0, 0);
+                $nextMonday = (clone $monday)->modify('+7 days');
+                $sql .= "created_at >= ? AND created_at < ?";
+                $params[] = $monday->format('Y-m-d H:i:s');
+                $params[] = $nextMonday->format('Y-m-d H:i:s');
                 break;
             case 'month':
-                $sql .= "MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE())";
+                $firstDay = (clone $now)->modify('first day of this month')->setTime(0, 0, 0);
+                $nextMonth = (clone $firstDay)->modify('+1 month');
+                $sql .= "created_at >= ? AND created_at < ?";
+                $params[] = $firstDay->format('Y-m-d H:i:s');
+                $params[] = $nextMonth->format('Y-m-d H:i:s');
                 break;
             default:
                 $sql .= "1=1";

@@ -30,10 +30,11 @@ class ReportController
 
         $db = Database::getInstance();
         $employeeSales = $db->query("
-            SELECT e.id, e.name, COUNT(s.id) as sale_count, COALESCE(SUM(s.total_usd),0) as total
-            FROM employees e
-            LEFT JOIN sales s ON s.employee_id = e.id
-            GROUP BY e.id ORDER BY total DESC
+            SELECT u.id, u.name, COUNT(s.id) as sale_count, COALESCE(SUM(s.total_usd),0) as total
+            FROM users u
+            LEFT JOIN sales s ON s.employee_id = u.id
+            WHERE u.role = 'empleado'
+            GROUP BY u.id ORDER BY total DESC
         ")->fetchAll();
 
         ob_start();

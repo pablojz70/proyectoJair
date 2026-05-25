@@ -127,7 +127,12 @@ class Payment
         }
 
         if ($period === 'month') {
-            $sql .= " AND MONTH(p.created_at) = MONTH(CURDATE()) AND YEAR(p.created_at) = YEAR(CURDATE())";
+            $now = new DateTime();
+            $first = (clone $now)->modify('first day of this month')->setTime(0, 0, 0);
+            $nextMonth = (clone $first)->modify('+1 month');
+            $sql .= " AND p.created_at >= ? AND p.created_at < ?";
+            $params[] = $first->format('Y-m-d H:i:s');
+            $params[] = $nextMonth->format('Y-m-d H:i:s');
         }
 
         $stmt = $this->db->prepare($sql);

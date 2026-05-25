@@ -160,16 +160,27 @@ class Employee
         $sql = "SELECT COUNT(*) as count, COALESCE(SUM(quantity),0) as total_qty, COALESCE(SUM(bonus_earned),0) as total_bonus
                 FROM employee_production WHERE user_id = ?";
         $params = [$userId];
+        $now = new DateTime();
 
         switch ($period) {
             case 'today':
-                $sql .= " AND produced_at = CURDATE()";
+                $sql .= " AND produced_at >= ? AND produced_at <= ?";
+                $params[] = $now->format('Y-m-d');
+                $params[] = $now->format('Y-m-d');
                 break;
             case 'week':
-                $sql .= " AND YEARWEEK(produced_at, 1) = YEARWEEK(CURDATE(), 1)";
+                $monday = (clone $now)->modify('monday this week');
+                $sunday = (clone $monday)->modify('+6 days');
+                $sql .= " AND produced_at >= ? AND produced_at <= ?";
+                $params[] = $monday->format('Y-m-d');
+                $params[] = $sunday->format('Y-m-d');
                 break;
             case 'month':
-                $sql .= " AND MONTH(produced_at) = MONTH(CURDATE()) AND YEAR(produced_at) = YEAR(CURDATE())";
+                $first = (clone $now)->modify('first day of this month');
+                $last = (clone $now)->modify('last day of this month');
+                $sql .= " AND produced_at >= ? AND produced_at <= ?";
+                $params[] = $first->format('Y-m-d');
+                $params[] = $last->format('Y-m-d');
                 break;
         }
 
@@ -187,16 +198,27 @@ class Employee
                 FROM users u
                 LEFT JOIN employee_production ep ON ep.user_id = u.id";
         $params = [];
+        $now = new DateTime();
 
         switch ($period) {
             case 'today':
-                $sql .= " AND ep.produced_at = CURDATE()";
+                $sql .= " AND ep.produced_at >= ? AND ep.produced_at <= ?";
+                $params[] = $now->format('Y-m-d');
+                $params[] = $now->format('Y-m-d');
                 break;
             case 'week':
-                $sql .= " AND YEARWEEK(ep.produced_at, 1) = YEARWEEK(CURDATE(), 1)";
+                $monday = (clone $now)->modify('monday this week');
+                $sunday = (clone $monday)->modify('+6 days');
+                $sql .= " AND ep.produced_at >= ? AND ep.produced_at <= ?";
+                $params[] = $monday->format('Y-m-d');
+                $params[] = $sunday->format('Y-m-d');
                 break;
             case 'month':
-                $sql .= " AND MONTH(ep.produced_at) = MONTH(CURDATE()) AND YEAR(ep.produced_at) = YEAR(CURDATE())";
+                $first = (clone $now)->modify('first day of this month');
+                $last = (clone $now)->modify('last day of this month');
+                $sql .= " AND ep.produced_at >= ? AND ep.produced_at <= ?";
+                $params[] = $first->format('Y-m-d');
+                $params[] = $last->format('Y-m-d');
                 break;
         }
 
