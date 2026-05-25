@@ -13,7 +13,8 @@ spl_autoload_register(function ($class) {
 
 Session::init();
 
-define('BASE_URL', '/proyectoJair');
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+define('BASE_URL', $scriptDir === '/' ? '' : $scriptDir);
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
