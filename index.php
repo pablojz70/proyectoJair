@@ -13,8 +13,10 @@ spl_autoload_register(function ($class) {
 
 Session::init();
 
-$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
-define('BASE_URL', $scriptDir === '/' ? '' : $scriptDir);
+$docRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? '');
+$scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_FILENAME'] ?? __DIR__));
+$basePath = str_replace($docRoot, '', $scriptDir);
+define('BASE_URL', $basePath === '/' || $basePath === '' ? '' : $basePath);
 
 $url = $_GET['url'] ?? '';
 $url = rtrim($url, '/');
