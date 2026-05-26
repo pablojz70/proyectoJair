@@ -73,7 +73,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/payments" class="nav-link <?= $controller === 'payments' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Pagos y Deudas
+                        <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Pagos Clientes
                     </a>
                 </li>
 
