@@ -64,9 +64,43 @@ class ClientController
             redirect(BASE_URL . '/clients/create');
         }
 
-        $this->clientModel->create($data);
+        $id = $this->clientModel->create($data);
         alert_success('Cliente creado exitosamente');
         redirect(BASE_URL . '/clients');
+    }
+
+    public function quickStore()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            json_response(['success' => false, 'error' => 'Metodo no permitido'], 405);
+        }
+
+        $data = [
+            'user_id' => Session::get('user_id'),
+            'full_name' => trim($_POST['full_name'] ?? ''),
+            'cedula_rif' => trim($_POST['cedula_rif'] ?? ''),
+            'phone' => trim($_POST['phone'] ?? ''),
+            'notes' => trim($_POST['notes'] ?? ''),
+        ];
+
+        $errors = [];
+        if (empty($data['full_name'])) $errors[] = 'El nombre es requerido';
+        if (empty($data['cedula_rif'])) $errors[] = 'La cedula/RIF es requerida';
+        if ($this->clientModel->existsByCedula($data['cedula_rif'], $data['user_id'])) {
+            $errors[] = 'Ya existe un cliente con esa cedula/RIF';
+        }
+
+        if (!empty($errors)) {
+            json_response(['success' => false, 'error' => implode('. ', $errors)]);
+        }
+
+        $id = $this->clientModel->create($data);
+        json_response([
+            'success' => true,
+            'id' => $id,
+            'full_name' => $data['full_name'],
+            'cedula_rif' => $data['cedula_rif'],
+        ]);
     }
 
     public function edit()

@@ -9,12 +9,17 @@
             <div class="row mb-4">
                 <div class="col-md-3">
                     <label class="form-label">Cliente *</label>
-                    <select name="client_id" class="form-select" required>
-                        <option value="">Seleccionar cliente...</option>
-                        <?php foreach ($clients as $client): ?>
-                        <option value="<?= $client['id'] ?>"><?= h($client['full_name']) ?> - <?= h($client['cedula_rif']) ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div class="input-group">
+                        <select name="client_id" class="form-select" id="clientSelect" required>
+                            <option value="">Seleccionar cliente...</option>
+                            <?php foreach ($clients as $client): ?>
+                            <option value="<?= $client['id'] ?>"><?= h($client['full_name']) ?> - <?= h($client['cedula_rif']) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <button class="btn btn-outline-success" type="button" title="Nuevo Cliente" data-bs-toggle="modal" data-bs-target="#newClientModal">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">Empleado</label>
@@ -223,5 +228,86 @@ document.addEventListener('DOMContentLoaded', function() {
             row.querySelector('.remove-product').disabled = rows.length <= 1;
         });
     }
+});
+</script>
+
+<div class="modal fade" id="newClientModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-person-plus me-2"></i>Nuevo Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="quickClientForm">
+                <div class="modal-body">
+                    <div id="quickClientMsg"></div>
+                    <div class="mb-3">
+                        <label class="form-label">Nombre completo *</label>
+                        <input type="text" name="full_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cedula / RIF *</label>
+                        <input type="text" name="cedula_rif" class="form-control" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Telefono</label>
+                            <input type="text" name="phone" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <textarea name="notes" class="form-control" rows="1"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success" id="saveClientBtn">
+                        <i class="bi bi-save me-2"></i>Guardar y Seleccionar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('quickClientForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('saveClientBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+
+    var formData = new FormData(this);
+    formData.append('ajax', '1');
+
+    fetch('<?= BASE_URL ?>/clients/quickStore', {
+        method: 'POST',
+        body: new URLSearchParams(formData),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        if (data.success) {
+            var opt = document.createElement('option');
+            opt.value = data.id;
+            opt.text = data.full_name + ' - ' + data.cedula_rif;
+            opt.selected = true;
+            document.getElementById('clientSelect').appendChild(opt);
+            var modal = bootstrap.Modal.getInstance(document.getElementById('newClientModal'));
+            modal.hide();
+            document.getElementById('quickClientForm').reset();
+            document.getElementById('quickClientMsg').innerHTML = '';
+        } else {
+            document.getElementById('quickClientMsg').innerHTML = '<div class="alert alert-danger py-2">' + data.error + '</div>';
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-save me-2"></i>Guardar y Seleccionar';
+    })
+    .catch(function() {
+        document.getElementById('quickClientMsg').innerHTML = '<div class="alert alert-danger py-2">Error de conexion</div>';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-save me-2"></i>Guardar y Seleccionar';
+    });
 });
 </script>
