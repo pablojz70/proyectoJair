@@ -37,7 +37,8 @@
                         <?php endif; ?>
                     </div>
 
-                    <?php if ($product['type'] ?? $type === 'compuesto'): ?>
+                    <?php $isCompuesto = (isset($product) && $product['type'] === 'compuesto') || (!isset($product) && ($type ?? '') === 'compuesto'); ?>
+                    <?php if ($isCompuesto): ?>
                     <div class="mb-3">
                         <label class="form-label">Esta receta produce (cantidad de unidades)</label>
                         <input type="number" name="recipe_yield" class="form-control" value="<?= $product['recipe_yield'] ?? old('recipe_yield', '1') ?>" min="1" required>
