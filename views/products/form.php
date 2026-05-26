@@ -20,7 +20,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <label class="form-label">Precio de venta (USD) *</label>
+                            <label class="form-label">Precio de venta POR PORCION (USD) *</label>
                             <input type="number" name="sale_price_usd" class="form-control" value="<?= $product['sale_price_usd'] ?? old('sale_price_usd', '0') ?>" step="0.01" min="0" required>
                         </div>
                         <?php if (!isset($product) || $product['type'] === 'simple'): ?>
@@ -40,12 +40,28 @@
                     <?php $isCompuesto = (isset($product) && $product['type'] === 'compuesto') || (!isset($product) && ($type ?? '') === 'compuesto'); ?>
                     <?php if ($isCompuesto): ?>
                     <div class="mb-3">
-                        <label class="form-label">Esta receta produce (cantidad de unidades)</label>
-                        <input type="number" name="recipe_yield" class="form-control" value="<?= $product['recipe_yield'] ?? old('recipe_yield', '1') ?>" min="1" required>
-                        <small class="text-muted">Ej: si la receta usa ingredientes para 10 tortas, pon 10</small>
+                        <label class="form-label">Rinde (cantidad de porciones/unidades)</label>
+                        <input type="number" name="recipe_yield" class="form-control" id="recipeYield" value="<?= $product['recipe_yield'] ?? old('recipe_yield', '1') ?>" min="1" required>
+                        <small class="text-muted">Ej: si la receta da 10 tortas, pon 10. El cliente podra comprar 1 porcion.</small>
+                    </div>
+                    <div class="alert alert-info py-2">
+                        Precio total del lote: <strong id="batchPrice"><?= format_usd(($product['sale_price_usd'] ?? 0) * ($product['recipe_yield'] ?? 1)) ?></strong>
+                        | Precio por porcion: <strong><?= format_usd($product['sale_price_usd'] ?? 0) ?></strong>
                     </div>
                     <hr>
-                    <h6 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Ingredientes (para las <?= $product['recipe_yield'] ?? 1 ?> unidades)</h6>
+                    <h6 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Ingredientes (para <?= $product['recipe_yield'] ?? 1 ?> porciones)</h6>
+                    <script>
+                    document.getElementById('recipeYield')?.addEventListener('input', function() {
+                        var price = parseFloat(document.querySelector('[name="sale_price_usd"]').value) || 0;
+                        var yieldVal = parseInt(this.value) || 1;
+                        document.getElementById('batchPrice').textContent = '$ ' + (price * yieldVal).toFixed(2);
+                    });
+                    document.querySelector('[name="sale_price_usd"]')?.addEventListener('input', function() {
+                        var price = parseFloat(this.value) || 0;
+                        var yieldVal = parseInt(document.getElementById('recipeYield')?.value) || 1;
+                        document.getElementById('batchPrice').textContent = '$ ' + (price * yieldVal).toFixed(2);
+                    });
+                    </script>
                     <div id="recipeContainer">
                         <?php if (isset($recipe) && !empty($recipe)): ?>
                         <?php foreach ($recipe as $i => $item): ?>

@@ -35,7 +35,7 @@
                         <th>Nombre</th>
                         <th>Tipo</th>
                         <th>Stock</th>
-                        <th>Precio Venta</th>
+                        <th>Precio c/u</th>
                         <th>Costo c/u</th>
                         <th>Rinde</th>
                         <th>Margen</th>

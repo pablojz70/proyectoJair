@@ -7,8 +7,9 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <strong>Precio de venta (c/u):</strong> <?= format_usd($product['sale_price_usd']) ?><br>
-                    <strong>Esta receta produce:</strong> <?= $product['recipe_yield'] ?? 1 ?> unidad(es)<br>
+                    <strong>Precio por porcion:</strong> <?= format_usd($product['sale_price_usd']) ?><br>
+                    <strong>Precio del lote (<?= $product['recipe_yield'] ?? 1 ?> pors.):</strong> <?= format_usd($product['sale_price_usd'] * ($product['recipe_yield'] ?? 1)) ?><br>
+                    <strong>Rinde:</strong> <?= $product['recipe_yield'] ?? 1 ?> porcion(es)<br>
                     <strong>Costo total de la receta:</strong> <?= format_usd($productionCost * ($product['recipe_yield'] ?? 1)) ?><br>
                     <strong>Costo de produccion (c/u):</strong> <?= format_usd($productionCost) ?><br>
                     <?php if ($productionCost > 0): ?>

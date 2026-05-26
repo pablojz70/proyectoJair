@@ -70,9 +70,9 @@
                                 data-stock="<?= $product['stock'] ?>">
                                 <?= h($product['name']) ?>
                                 <?php if ($product['type'] === 'compuesto' && $product['recipe_yield'] > 0): ?>
-                                    (rinde <?= (int)$product['recipe_yield'] ?>)
+                                    (c/u, rinde <?= (int)$product['recipe_yield'] ?>)
                                 <?php endif; ?>
-                                - <?= format_usd($product['sale_price_usd']) ?>
+                                - <?= format_usd($product['sale_price_usd']) ?> c/u
                             </option>
                             <?php endforeach; ?>
                         </select>
