@@ -11,9 +11,20 @@
                     <i class="bi bi-check-circle me-2"></i>Este cliente no tiene deudas pendientes
                 </p>
                 <?php else: ?>
-                <div class="alert alert-info">
-                    <strong>Deuda total:</strong> <?= format_usd($totalDebt) ?>
-                    (<?= format_bs($totalDebt * ($exchangeRate ?: 1)) ?> a tasa Bs. <?= number_format($exchangeRate ?: 0, 2) ?>)
+                <div class="alert alert-info d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div>
+                        <strong>Deuda total:</strong> <?= format_usd($totalDebt) ?>
+                        (<?= format_bs($totalDebt * ($exchangeRate ?: 1)) ?> a tasa Bs. <?= number_format($exchangeRate ?: 0, 2) ?>)
+                    </div>
+                    <?php if (!empty($client['phone'])): ?>
+                    <?php
+                    $msg = "Hola " . $client['full_name'] . ", le notificamos que tiene una deuda pendiente de " . format_usd($totalDebt) . ". Por favor contactenos para ponerse al dia. Gracias.";
+                    $w = wa_link($client['phone'], $msg);
+                    ?>
+                    <a href="<?= $w ?>" target="_blank" class="btn btn-success btn-sm">
+                        <i class="bi bi-whatsapp me-1"></i>Enviar Deuda por WhatsApp
+                    </a>
+                    <?php endif; ?>
                 </div>
 
                 <form method="POST" action="<?= BASE_URL ?>/payments/pay" id="paymentForm">

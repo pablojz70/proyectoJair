@@ -78,7 +78,7 @@ class Payment
     public function getDebts($userId = null)
     {
         $sql = "SELECT s.id as sale_id, s.total_usd, s.total_bs, s.due_date, s.created_at as sale_date,
-                       c.id as client_id, c.full_name as client_name,
+                       c.id as client_id, c.full_name as client_name, c.phone as client_phone,
                        COALESCE((SELECT SUM(amount_usd) FROM payments WHERE sale_id = s.id), 0) as paid
                 FROM sales s
                 JOIN clients c ON c.id = s.client_id
@@ -98,9 +98,9 @@ class Payment
 
     public function getDebtsByClient($clientId, $userId = null)
     {
-        $sql = "SELECT s.id as sale_id, s.total_usd, s.total_bs, s.due_date, s.created_at as sale_date,
+        $sql = "SELECT s.id as sale_id, s.total_usd, s.total_bs, s.due_date, s.created_at as sale_date, c.phone as client_phone,
                        COALESCE((SELECT SUM(amount_usd) FROM payments WHERE sale_id = s.id), 0) as paid
-                FROM sales s
+                FROM sales s JOIN clients c ON c.id = s.client_id
                 WHERE s.client_id = ? AND s.sale_type = 'credito' AND s.status != 'pagada'";
         $params = [$clientId];
 
@@ -153,6 +153,7 @@ class Payment
                 $clients[$debt['client_id']] = [
                     'client_id' => $debt['client_id'],
                     'client_name' => $debt['client_name'],
+                    'client_phone' => $debt['client_phone'] ?? '',
                     'total_debt' => 0,
                     'count' => 0,
                     'overdue' => false,

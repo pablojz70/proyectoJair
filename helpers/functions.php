@@ -96,6 +96,15 @@ function json_response($data, $status = 200)
     exit;
 }
 
+function wa_link($phone, $text)
+{
+    $phone = preg_replace('/[^0-9]/', '', $phone);
+    if (strlen($phone) <= 7) return '';
+    if (strlen($phone) <= 10) $phone = '58' . $phone;
+    if (substr($phone, 0, 1) === '0') $phone = '58' . substr($phone, 1);
+    return 'https://wa.me/' . $phone . '?text=' . rawurlencode($text);
+}
+
 function get_status_badge($status)
 {
     $map = [
