@@ -37,6 +37,7 @@
                         <th>Stock</th>
                         <th>Precio Venta</th>
                         <th>Costo Prod.</th>
+                        <th>Rinde</th>
                         <th>Margen</th>
                         <th>Acciones</th>
                     </tr>
@@ -44,7 +45,7 @@
                 <tbody>
                     <?php if (empty($products)): ?>
                     <tr>
-                        <td colspan="7" class="text-center py-4 text-muted">
+                        <td colspan="8" class="text-center py-4 text-muted">
                             <i class="bi bi-inbox me-2"></i>No hay productos registrados
                         </td>
                     </tr>
@@ -77,6 +78,13 @@
                         <td>
                             <?php if ($product['production_cost_usd'] > 0): ?>
                                 <?= format_usd($product['production_cost_usd']) ?>
+                            <?php else: ?>
+                                <span class="text-muted">-</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($product['type'] === 'compuesto'): ?>
+                                <?= (int) ($product['recipe_yield'] ?? 1) ?> unid.
                             <?php else: ?>
                                 <span class="text-muted">-</span>
                             <?php endif; ?>
