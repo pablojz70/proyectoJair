@@ -7,6 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="<?= BASE_URL ?>/assets/css/style.css" rel="stylesheet">
+    <link rel="manifest" href="<?= BASE_URL ?>/manifest.php">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
     <?php if (Session::isLoggedIn()):
@@ -149,6 +152,9 @@
                 <?php endif; ?>
             </ul>
             <div class="p-3 border-top border-secondary">
+                <a href="#" id="installAppBtn" class="btn btn-outline-light btn-sm w-100 mb-2" style="display:none">
+                    <i class="bi bi-download me-2"></i>Instalar App
+                </a>
                 <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-outline-light btn-sm w-100">
                     <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesion
                 </a>

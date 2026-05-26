@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const toggleBtn = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    var deferredPrompt = null;
 
     function toggleSidebar() {
         sidebar.classList.toggle('show');
@@ -39,5 +40,30 @@ document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (el) {
         return new bootstrap.Tooltip(el);
+    });
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        var btn = document.getElementById('installAppBtn');
+        if (btn) btn.style.display = 'block';
+    });
+
+    var installBtn = document.getElementById('installAppBtn');
+    if (installBtn) {
+        installBtn.addEventListener('click', function () {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function () {
+                    deferredPrompt = null;
+                    installBtn.style.display = 'none';
+                });
+            }
+        });
+    }
+
+    window.addEventListener('appinstalled', function () {
+        var btn = document.getElementById('installAppBtn');
+        if (btn) btn.style.display = 'none';
     });
 });
