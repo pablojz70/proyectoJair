@@ -176,6 +176,42 @@ class ProductController
         redirect(BASE_URL . '/products');
     }
 
+    public function duplicate()
+    {
+        $id = $_GET['params'][0] ?? null;
+        if (!$id) redirect(BASE_URL . '/products');
+
+        $product = $this->model->findById($id);
+        if (!$product) {
+            alert_error('Producto no encontrado');
+            redirect(BASE_URL . '/products');
+        }
+
+        $data = [
+            'user_id' => Session::get('user_id'),
+            'name' => $product['name'] . ' (copia)',
+            'description' => $product['description'],
+            'type' => $product['type'],
+            'sale_price_usd' => $product['sale_price_usd'],
+            'stock' => $product['type'] === 'simple' ? $product['stock'] : null,
+            'production_cost_usd' => $product['production_cost_usd'],
+            'recipe_yield' => $product['recipe_yield'] ?? 1,
+        ];
+
+        $newId = $this->model->create($data);
+
+        if ($product['type'] === 'compuesto') {
+            $recipe = $this->model->getRecipe($id);
+            foreach ($recipe as $item) {
+                $this->model->addRecipeItem($newId, $item['raw_material_id'], $item['quantity']);
+            }
+            $this->model->updateProductionCost($newId);
+        }
+
+        alert_success('Producto duplicado exitosamente. Ahora puedes editarlo.');
+        redirect(BASE_URL . "/products/edit/{$newId}");
+    }
+
     public function delete()
     {
         $id = $_GET['params'][0] ?? null;

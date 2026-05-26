@@ -93,6 +93,9 @@
                             <?= $product['production_cost_usd'] > 0 ? number_format($margin, 1) . '%' : '-' ?>
                         </td>
                         <td>
+                            <a href="<?= BASE_URL ?>/products/duplicate/<?= $product['id'] ?>" class="btn btn-sm btn-outline-secondary btn-icon" title="Duplicar">
+                                <i class="bi bi-copy"></i>
+                            </a>
                             <a href="<?= BASE_URL ?>/products/edit/<?= $product['id'] ?>" class="btn btn-sm btn-outline-primary btn-icon" title="Editar">
                                 <i class="bi bi-pencil"></i>
                             </a>
