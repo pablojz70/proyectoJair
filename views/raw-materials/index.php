@@ -69,7 +69,8 @@
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <button type="button" class="btn btn-sm btn-outline-success btn-icon" title="Ajustar Stock"
-                                data-bs-toggle="modal" data-bs-target="#stockModal" data-id="<?= $mat['id'] ?>" data-name="<?= h($mat['name']) ?>">
+                                data-bs-toggle="modal" data-bs-target="#stockModal" data-id="<?= $mat['id'] ?>" data-name="<?= h($mat['name']) ?>"
+                                data-pqty="<?= $mat['presentation_qty'] ?>" data-unit="<?= h($mat['unit']) ?>">
                                 <i class="bi bi-plus-circle"></i>
                             </button>
                             <a href="<?= BASE_URL ?>/raw-materials/delete/<?= $mat['id'] ?>" class="btn btn-sm btn-outline-danger btn-icon" title="Eliminar" onclick="return confirm('Eliminar <?= h($mat['name']) ?>?')">
@@ -90,14 +91,18 @@
         <div class="modal-content">
             <form method="POST" action="">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ajustar Stock</h5>
+                    <h5 class="modal-title"><i class="bi bi-plus-circle me-2"></i>Ajustar Stock</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <p>Agregar stock a: <strong id="modalMaterialName"></strong></p>
+                    <p class="text-muted small">Cada presentacion = <strong id="modalPqty">1</strong> <span id="modalUnit">unidad</span></p>
                     <div class="mb-3">
-                        <label class="form-label">Cantidad a agregar</label>
-                        <input type="number" name="quantity" class="form-control" min="0.01" step="0.01" required>
+                        <label class="form-label">Cantidad de presentaciones a agregar</label>
+                        <input type="number" name="packages" class="form-control" id="packagesInput" min="1" step="1" required>
+                    </div>
+                    <div class="alert alert-info py-2">
+                        Total a agregar: <strong id="totalToAdd">0</strong> <span id="totalUnit">unidad</span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -116,7 +121,21 @@ document.getElementById('stockModal').addEventListener('show.bs.modal', function
     var button = event.relatedTarget;
     var id = button.getAttribute('data-id');
     var name = button.getAttribute('data-name');
+    var pqty = parseFloat(button.getAttribute('data-pqty')) || 1;
+    var unit = button.getAttribute('data-unit') || 'unidad';
     document.getElementById('modalMaterialName').textContent = name;
+    document.getElementById('modalPqty').textContent = pqty;
+    document.getElementById('modalUnit').textContent = unit;
+    document.getElementById('totalUnit').textContent = unit;
     this.querySelector('form').action = '<?= BASE_URL ?>/raw-materials/adjust/' + id;
+    updateTotal();
 });
+
+document.getElementById('packagesInput').addEventListener('input', updateTotal);
+
+function updateTotal() {
+    var pqty = parseFloat(document.getElementById('modalPqty').textContent) || 1;
+    var pkgs = parseFloat(document.getElementById('packagesInput').value) || 0;
+    document.getElementById('totalToAdd').textContent = (pqty * pkgs).toFixed(2);
+}
 </script>

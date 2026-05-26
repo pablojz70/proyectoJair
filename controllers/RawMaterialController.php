@@ -48,6 +48,7 @@ class RawMaterialController
             'user_id' => Session::get('user_id'),
             'name' => trim($_POST['name'] ?? ''),
             'unit' => $_POST['unit'] ?? '',
+            'presentation_qty' => (float) ($_POST['presentation_qty'] ?? 1),
             'stock' => (float) ($_POST['stock'] ?? 0),
             'unit_cost_usd' => (float) ($_POST['unit_cost_usd'] ?? 0),
             'min_stock' => (float) ($_POST['min_stock'] ?? 5),
@@ -97,6 +98,7 @@ class RawMaterialController
         $data = [
             'name' => trim($_POST['name'] ?? ''),
             'unit' => $_POST['unit'] ?? '',
+            'presentation_qty' => (float) ($_POST['presentation_qty'] ?? 1),
             'stock' => (float) ($_POST['stock'] ?? 0),
             'unit_cost_usd' => (float) ($_POST['unit_cost_usd'] ?? 0),
             'min_stock' => (float) ($_POST['min_stock'] ?? 5),
@@ -114,11 +116,15 @@ class RawMaterialController
             redirect(BASE_URL . '/raw-materials');
         }
 
-        $quantity = (float) ($_POST['quantity'] ?? 0);
-        if ($quantity <= 0) {
-            alert_error('La cantidad debe ser mayor a 0');
+        $material = $this->model->findById($id);
+        $packages = (int) ($_POST['packages'] ?? 0);
+        if ($packages <= 0) {
+            alert_error('La cantidad de presentaciones debe ser mayor a 0');
             redirect(BASE_URL . '/raw-materials');
         }
+
+        $presentationQty = (float) ($material['presentation_qty'] ?? 1);
+        $quantity = $packages * $presentationQty;
 
         $this->model->adjustStock($id, $quantity);
         alert_success('Stock ajustado exitosamente');

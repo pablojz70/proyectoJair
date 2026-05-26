@@ -23,14 +23,23 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad por presentacion</label>
+                        <div class="input-group">
+                            <input type="number" name="presentation_qty" class="form-control" value="<?= $material['presentation_qty'] ?? old('presentation_qty', '1') ?>" step="0.01" min="0.01">
+                            <span class="input-group-text" id="unitLabel"><?= $material['unit'] ?? 'unidad' ?></span>
+                        </div>
+                        <small class="text-muted">Ej: si el aceite viene en botellas de 850ml, pon 850. Si es a granel, deja 1.</small>
+                    </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Stock actual</label>
+                            <label class="form-label">Stock actual <small class="text-muted">(en <?= $material['unit'] ?? 'unidad' ?>)</small></label>
                             <input type="number" name="stock" class="form-control" value="<?= $material['stock'] ?? old('stock', '0') ?>" step="0.01" min="0">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Costo unitario (USD)</label>
+                            <label class="form-label">Costo por presentacion (USD)</label>
                             <input type="number" name="unit_cost_usd" class="form-control" value="<?= $material['unit_cost_usd'] ?? old('unit_cost_usd', '0') ?>" step="0.0001" min="0">
+                            <small class="text-muted">Costo de cada presentacion (botella, bolsa, etc.)</small>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -46,3 +55,9 @@
         </div>
     </div>
 </div>
+
+<script>
+document.querySelector('[name="unit"]').addEventListener('change', function() {
+    document.getElementById('unitLabel').textContent = this.value || 'unidad';
+});
+</script>

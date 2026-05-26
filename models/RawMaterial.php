@@ -39,12 +39,13 @@ class RawMaterial
     public function create($data)
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO raw_materials (user_id, name, unit, stock, unit_cost_usd, min_stock) VALUES (?, ?, ?, ?, ?, ?)"
+            "INSERT INTO raw_materials (user_id, name, unit, presentation_qty, stock, unit_cost_usd, min_stock) VALUES (?, ?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
             $data['user_id'],
             $data['name'],
             $data['unit'],
+            $data['presentation_qty'] ?? 1,
             $data['stock'] ?? 0,
             $data['unit_cost_usd'] ?? 0,
             $data['min_stock'] ?? 5,
@@ -55,11 +56,12 @@ class RawMaterial
     public function update($id, $data)
     {
         $stmt = $this->db->prepare(
-            "UPDATE raw_materials SET name = ?, unit = ?, stock = ?, unit_cost_usd = ?, min_stock = ? WHERE id = ?"
+            "UPDATE raw_materials SET name = ?, unit = ?, presentation_qty = ?, stock = ?, unit_cost_usd = ?, min_stock = ? WHERE id = ?"
         );
         return $stmt->execute([
             $data['name'],
             $data['unit'],
+            $data['presentation_qty'] ?? 1,
             $data['stock'] ?? 0,
             $data['unit_cost_usd'] ?? 0,
             $data['min_stock'] ?? 5,
