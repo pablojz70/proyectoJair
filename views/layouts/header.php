@@ -100,6 +100,19 @@
                         <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
                     </a>
                 </li>
+                <li class="nav-item mt-2">
+                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Ventas</small>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/sales/register" class="nav-link <?= $controller === 'sales' && $action === 'register' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/venta.png" class="sidebar-icon me-2">Nueva Venta
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/sales" class="nav-link <?= $controller === 'sales' && $action === 'index' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/historial.png" class="sidebar-icon me-2">Historial
+                    </a>
+                </li>
                 <?php endif; ?>
 
                 <?php if (Session::isAdmin()): ?>
