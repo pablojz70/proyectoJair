@@ -18,7 +18,8 @@
                     </div>
                     <?php if (!empty($client['phone'])): ?>
                     <?php
-                    $msg = "Hola " . $client['full_name'] . ", le notificamos que tiene una deuda pendiente de " . format_usd($totalDebt) . ". Por favor contactenos para ponerse al dia. Gracias.";
+                    $bsAmount = $totalDebt * ($exchangeRate ?: 1);
+                    $msg = "Hola " . $client['full_name'] . ", le notificamos que tiene una deuda pendiente de " . format_usd($totalDebt) . ". Si realiza el pago hoy debe cancelar " . format_bs($bsAmount) . ". Hacer el pago al 04121767081 Banco Banesco CI 18797032 y enviar captura para verificar el Pago.";
                     $w = wa_link($client['phone'], $msg);
                     ?>
                     <a href="<?= $w ?>" target="_blank" class="btn btn-success btn-sm">

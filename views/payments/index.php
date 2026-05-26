@@ -41,7 +41,8 @@
                             </a>
                             <?php if (!empty($client['client_phone'])): ?>
                             <?php
-                            $msg = "Hola " . $client['client_name'] . ", le recordamos que tiene un saldo pendiente de " . format_usd($client['total_debt']) . ". Por favor comuniquese para realizar el pago.";
+                            $bsAmount = $client['total_debt'] * ($exchangeRate ?: 1);
+                            $msg = "Hola " . $client['client_name'] . ", le recordamos que tiene un saldo pendiente de " . format_usd($client['total_debt']) . ". Si realiza el pago hoy debe cancelar " . format_bs($bsAmount) . ". Hacer el pago al Numero de Telefono 04121767081 Banco Banesco CI 18797032 y enviar captura para verificar el Pago.";
                             $w = wa_link($client['client_phone'], $msg);
                             ?>
                             <a href="<?= $w ?>" target="_blank" class="btn btn-sm btn-outline-success" title="Enviar WhatsApp">
@@ -122,7 +123,8 @@
                             </a>
                             <?php if (!empty($debt['client_phone'])): ?>
                             <?php
-                            $msg = "Hola " . $debt['client_name'] . ", recuerde que tiene una venta a credito de " . format_usd($debt['total_usd']) . " (saldo: " . format_usd($balance) . ") vencida el " . format_date($debt['due_date']) . ". Por favor pongase al dia.";
+                            $bsAmount = $balance * ($exchangeRate ?: 1);
+                            $msg = "Hola " . $debt['client_name'] . ", recuerde que tiene una venta a credito de " . format_usd($debt['total_usd']) . " (saldo pendiente: " . format_usd($balance) . "). Si realiza el pago hoy debe cancelar " . format_bs($bsAmount) . ". Hacer el pago al 04121767081 Banco Banesco CI 18797032 y enviar captura para verificar.";
                             $w = wa_link($debt['client_phone'], $msg);
                             ?>
                             <a href="<?= $w ?>" target="_blank" class="btn btn-sm btn-outline-success btn-icon" title="WhatsApp">

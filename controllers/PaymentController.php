@@ -28,6 +28,7 @@ class PaymentController
         }
 
         $overdueClients = $this->paymentModel->getOverdueClients($userId);
+        $exchangeRate = ExchangeRate::getRateQuick();
 
         ob_start();
         require __DIR__ . '/../views/payments/index.php';
@@ -90,7 +91,7 @@ class PaymentController
         }
 
         if ($exchangeRate <= 0) {
-            $exchangeRate = ExchangeRate::getRate();
+        $exchangeRate = ExchangeRate::getRateQuick();
         }
 
         if ($amountUsd <= 0 && $amountBs > 0) {
