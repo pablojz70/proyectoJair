@@ -41,7 +41,7 @@
                 </div>
                 <div class="col-md-2" id="dueDateField" style="display:none">
                     <label class="form-label">Fecha vencimiento</label>
-                    <input type="date" name="due_date" class="form-control">
+                    <input type="date" name="due_date" class="form-control" id="dueDate">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Tasa Bs/USD</label>
@@ -128,13 +128,23 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const dueDate = document.getElementById('dueDate');
     const saleType = document.getElementById('saleType');
     const dueDateField = document.getElementById('dueDateField');
+
+    function getLastDayOfMonth() {
+        var d = new Date();
+        var last = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+        return last.toISOString().split('T')[0];
+    }
 
     saleType.addEventListener('change', function() {
         dueDateField.style.display = this.value === 'credito' ? 'block' : 'none';
         if (this.value === 'credito') {
             document.querySelector('[name="due_date"]').required = true;
+            if (!dueDate.value) {
+                dueDate.value = getLastDayOfMonth();
+            }
         } else {
             document.querySelector('[name="due_date"]').required = false;
         }
