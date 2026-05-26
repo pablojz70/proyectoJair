@@ -102,7 +102,7 @@ class SaleController
 
         foreach ($productIds as $i => $pid) {
             if (empty($pid)) continue;
-            $qty = (float) ($quantities[$i] ?? 0);
+            $qty = (int) ($quantities[$i] ?? 0);
             if ($qty <= 0) continue;
 
             $product = $this->productModel->findById($pid);

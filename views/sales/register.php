@@ -75,7 +75,7 @@
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <input type="number" name="quantity[]" class="form-control quantity-input" placeholder="Cantidad" min="0.01" step="0.01" required>
+                        <input type="number" name="quantity[]" class="form-control quantity-input" placeholder="Cantidad" min="1" step="1" required>
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control unit-price" placeholder="Precio USD" readonly>
