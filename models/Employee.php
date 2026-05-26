@@ -121,12 +121,13 @@ class Employee
     private function initSettingsTable()
     {
         try {
-            $this->db->exec("CREATE TABLE IF NOT EXISTS settings (
+            $pdo = $this->db->getConnection();
+            $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
                 key_name VARCHAR(50) PRIMARY KEY,
                 key_value VARCHAR(255) NOT NULL,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             )");
-            $this->db->exec("INSERT IGNORE INTO settings (key_name, key_value) VALUES
+            $pdo->exec("INSERT IGNORE INTO settings (key_name, key_value) VALUES
                 ('commission_rate', '5'),
                 ('bonus_amount', '2'),
                 ('bonus_every_units', '10')");
