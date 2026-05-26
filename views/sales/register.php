@@ -59,16 +59,19 @@
             <h6 class="fw-bold"><i class="bi bi-box me-2"></i>Productos</h6>
             <div id="productContainer">
                 <div class="row g-2 mb-2 product-row">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <select name="product_id[]" class="form-select product-select" required>
                             <option value="">Seleccionar producto...</option>
                             <?php foreach ($products as $product): ?>
                             <option value="<?= $product['id'] ?>"
                                 data-price="<?= $product['sale_price_usd'] ?>"
+                                data-cost="<?= $product['production_cost_usd'] ?: 0 ?>"
                                 data-type="<?= $product['type'] ?>"
                                 data-stock="<?= $product['stock'] ?>">
                                 <?= h($product['name']) ?>
-                                (<?= $product['type'] ?>)
+                                <?php if ($product['type'] === 'compuesto' && $product['recipe_yield'] > 0): ?>
+                                    (rinde <?= (int)$product['recipe_yield'] ?>)
+                                <?php endif; ?>
                                 - <?= format_usd($product['sale_price_usd']) ?>
                             </option>
                             <?php endforeach; ?>
@@ -79,6 +82,9 @@
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control unit-price" placeholder="Precio USD" readonly>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="text" class="form-control unit-cost" placeholder="Costo" readonly style="font-size:0.8rem;color:#6c757d">
                     </div>
                     <div class="col-md-2">
                         <input type="text" class="form-control subtotal" placeholder="Subtotal" readonly>
@@ -180,7 +186,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('product-select')) {
             const row = e.target.closest('.product-row');
             const price = e.target.selectedOptions[0]?.dataset.price || 0;
+            const cost = e.target.selectedOptions[0]?.dataset.cost || 0;
             row.querySelector('.unit-price').value = '$ ' + parseFloat(price).toFixed(2);
+            row.querySelector('.unit-cost').value = '$ ' + parseFloat(cost).toFixed(2);
             updateRowSubtotal(row);
             updateTotals();
         }

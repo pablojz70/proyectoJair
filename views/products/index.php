@@ -36,7 +36,7 @@
                         <th>Tipo</th>
                         <th>Stock</th>
                         <th>Precio Venta</th>
-                        <th>Costo Prod.</th>
+                        <th>Costo c/u</th>
                         <th>Rinde</th>
                         <th>Margen</th>
                         <th>Acciones</th>
