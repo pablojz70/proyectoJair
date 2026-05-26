@@ -13,7 +13,7 @@ class Client
         $sql = "SELECT * FROM clients WHERE 1=1";
         $params = [];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'vendedor') {
             $sql .= " AND user_id = ?";
             $params[] = $userId;
         }
@@ -35,7 +35,7 @@ class Client
         $sql = "SELECT * FROM clients WHERE id = ?";
         $params = [$id];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'vendedor') {
             $sql .= " AND user_id = ?";
             $params[] = $userId;
         }
@@ -79,7 +79,7 @@ class Client
         $sql = "DELETE FROM clients WHERE id = ?";
         $params = [$id];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'vendedor') {
             $sql .= " AND user_id = ?";
             $params[] = $userId;
         }
@@ -108,8 +108,8 @@ class Client
         $sql = "SELECT s.* FROM sales s WHERE s.client_id = ?";
         $params = [$clientId];
 
-        if ($userId && !Session::isAdmin()) {
-            $sql .= " AND s.user_id = ?";
+        if ($userId && Session::get('user_role') === 'vendedor') {
+            $sql .= " AND user_id = ?";
             $params[] = $userId;
         }
 
