@@ -13,7 +13,7 @@ class Product
         $sql = "SELECT p.* FROM products p WHERE 1=1";
         $params = [];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'vendedor') {
             $sql .= " AND p.user_id = ?";
             $params[] = $userId;
         }
@@ -170,7 +170,7 @@ class Product
 
         $sql .= "(" . implode(" OR ", $conditions) . ")";
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'vendedor') {
             $sql .= " AND p.user_id = ?";
             $params[] = $userId;
         }
