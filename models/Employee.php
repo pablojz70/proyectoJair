@@ -104,16 +104,38 @@ class Employee
 
     public function getSettings()
     {
-        $stmt = $this->db->query("SELECT key_name, key_value FROM settings");
-        $result = ['commission_rate' => '0', 'bonus_amount' => '0', 'bonus_every_units' => '10'];
-        foreach ($stmt->fetchAll() as $row) {
-            $result[$row['key_name']] = $row['key_value'];
+        $defaults = ['commission_rate' => '5', 'bonus_amount' => '2', 'bonus_every_units' => '10'];
+        try {
+            $stmt = $this->db->query("SELECT key_name, key_value FROM settings");
+            $result = $defaults;
+            foreach ($stmt->fetchAll() as $row) {
+                $result[$row['key_name']] = $row['key_value'];
+            }
+            return $result;
+        } catch (Exception $e) {
+            $this->initSettingsTable();
+            return $defaults;
         }
-        return $result;
+    }
+
+    private function initSettingsTable()
+    {
+        try {
+            $this->db->exec("CREATE TABLE IF NOT EXISTS settings (
+                key_name VARCHAR(50) PRIMARY KEY,
+                key_value VARCHAR(255) NOT NULL,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            )");
+            $this->db->exec("INSERT IGNORE INTO settings (key_name, key_value) VALUES
+                ('commission_rate', '5'),
+                ('bonus_amount', '2'),
+                ('bonus_every_units', '10')");
+        } catch (Exception $e) {}
     }
 
     public function saveSettings($data)
     {
+        $this->initSettingsTable();
         $allowed = ['commission_rate', 'bonus_amount', 'bonus_every_units'];
         foreach ($allowed as $key) {
             if (isset($data[$key])) {
