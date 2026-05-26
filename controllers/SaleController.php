@@ -194,6 +194,30 @@ class SaleController
         require __DIR__ . '/../views/layouts/footer.php';
     }
 
+    public function delete()
+    {
+        Session::requireAdmin();
+        $id = $_GET['params'][0] ?? null;
+        if (!$id) {
+            redirect(BASE_URL . '/sales');
+        }
+
+        $sale = $this->saleModel->findById($id);
+        if (!$sale) {
+            alert_error('Venta no encontrada');
+            redirect(BASE_URL . '/sales');
+        }
+
+        try {
+            $this->saleModel->delete($id);
+            alert_success('Venta #' . $id . ' eliminada correctamente. Stock restaurado.');
+        } catch (Exception $e) {
+            alert_error('Error al eliminar la venta: ' . $e->getMessage());
+        }
+
+        redirect(BASE_URL . '/sales');
+    }
+
     public function getProductInfo()
     {
         $id = (int) ($_GET['id'] ?? 0);

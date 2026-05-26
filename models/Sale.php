@@ -227,4 +227,43 @@ class Sale
         $stmt->execute([$saleId]);
         return $stmt->fetchColumn();
     }
+
+    public function delete($id)
+    {
+        $this->db->getConnection()->beginTransaction();
+        try {
+            $items = $this->getItems($id);
+            foreach ($items as $item) {
+                if ($item['product_type'] === 'simple') {
+                    $stmt = $this->db->prepare("UPDATE products SET stock = stock + ? WHERE id = ?");
+                    $stmt->execute([$item['quantity'], $item['product_id']]);
+                } else {
+                    $pYield = $this->db->prepare("SELECT recipe_yield FROM products WHERE id = ?");
+                    $pYield->execute([$item['product_id']]);
+                    $yield = (int) ($pYield->fetchColumn() ?: 1);
+                    $recipeItems = $this->getProductRecipe($item['product_id']);
+                    foreach ($recipeItems as $recipe) {
+                        $restoreQty = ($recipe['quantity'] / $yield) * $item['quantity'];
+                        $stmt = $this->db->prepare("UPDATE raw_materials SET stock = stock + ? WHERE id = ?");
+                        $stmt->execute([$restoreQty, $recipe['raw_material_id']]);
+                    }
+                }
+            }
+
+            $stmt = $this->db->prepare("DELETE FROM payments WHERE sale_id = ?");
+            $stmt->execute([$id]);
+
+            $stmt = $this->db->prepare("DELETE FROM sale_items WHERE sale_id = ?");
+            $stmt->execute([$id]);
+
+            $stmt = $this->db->prepare("DELETE FROM sales WHERE id = ?");
+            $stmt->execute([$id]);
+
+            $this->db->getConnection()->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->db->getConnection()->rollBack();
+            throw $e;
+        }
+    }
 }

@@ -71,6 +71,12 @@
                             <a href="<?= BASE_URL ?>/sales/detail/<?= $sale['id'] ?>" class="btn btn-sm btn-outline-info btn-icon">
                                 <i class="bi bi-eye"></i>
                             </a>
+                            <?php if (Session::isAdmin()): ?>
+                            <a href="<?= BASE_URL ?>/sales/delete/<?= $sale['id'] ?>" class="btn btn-sm btn-outline-danger btn-icon"
+                               onclick="return confirm('Eliminar venta #<?= $sale['id'] ?>?\nSe restaurara el stock de los productos.');">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
