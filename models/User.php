@@ -32,7 +32,7 @@ class User
     public function create($data)
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO users (name, username, email, password, phone, role, commission_rate, bonus_per_10_units) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO users (name, username, email, password, phone, role) VALUES (?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
             $data['name'],
@@ -41,8 +41,6 @@ class User
             password_hash($data['password'], PASSWORD_BCRYPT),
             $data['phone'] ?? null,
             $data['role'] ?? 'vendedor',
-            $data['commission_rate'] ?? 0,
-            $data['bonus_per_10_units'] ?? 0,
         ]);
         return $this->db->lastInsertId();
     }
@@ -62,11 +60,10 @@ class User
     public function update($id, $data)
     {
         $sql = "UPDATE users SET name = ?, username = ?, email = ?, phone = ?, role = ?,
-                commission_rate = ?, bonus_per_10_units = ?, employee_status = ?";
+                employee_status = ?";
         $params = [
             $data['name'], $data['username'], $data['email'], $data['phone'] ?? null,
             $data['role'] ?? 'vendedor',
-            $data['commission_rate'] ?? 0, $data['bonus_per_10_units'] ?? 0,
             $data['employee_status'] ?? 'activo',
         ];
 

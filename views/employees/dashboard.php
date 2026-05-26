@@ -30,7 +30,7 @@
         <div class="card stat-card warning"><div class="card-body">
             <small class="text-muted text-uppercase">Total</small>
             <h4 class="mt-1"><?= $accumulated ?> unid.</h4>
-            <small class="text-muted">Comision: <?= $employee['commission_rate'] ?>%</small>
+            <small class="text-muted">Comision: <?= $settings['commission_rate'] ?>% | Bono c/<?= $settings['bonus_every_units'] ?>: $<?= number_format($settings['bonus_amount'], 2) ?></small>
         </div></div>
     </div>
 </div>

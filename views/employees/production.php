@@ -44,7 +44,7 @@
         </form>
         <div class="alert alert-info mt-3 mb-0 py-2 small">
             <i class="bi bi-info-circle me-1"></i> Al producir se descuenta automaticamente el stock de materias primas.
-            Cada 10 unidades acumuladas generan un bono.
+            Se paga <strong>$<?= number_format($settings['bonus_amount'], 2) ?></strong> de bono cada <strong><?= (int)$settings['bonus_every_units'] ?></strong> unidades producidas.
         </div>
     </div>
 </div>

@@ -33,29 +33,17 @@
                             <option value="admin" <?= (isset($user) && $user['role'] === 'admin') ? 'selected' : '' ?>>Administrador</option>
                         </select>
                     </div>
-                    <div id="employeeFields" style="<?= (isset($user) && $user['role'] === 'empleado') ? '' : 'display:none' ?>">
-                        <hr>
-                        <h6 class="fw-bold"><i class="bi bi-gear me-2"></i>Configuracion de Empleado</h6>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Comision sobre ventas (%)</label>
-                                <input type="number" name="commission_rate" class="form-control" value="<?= $user['commission_rate'] ?? old('commission_rate', '0') ?>" step="0.01" min="0" max="100">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Bono por cada 10 unidades ($)</label>
-                                <input type="number" name="bonus_per_10_units" class="form-control" value="<?= $user['bonus_per_10_units'] ?? old('bonus_per_10_units', '0') ?>" step="0.01" min="0">
-                            </div>
-                        </div>
-                        <?php if (isset($user)): ?>
-                        <div class="mb-3">
-                            <label class="form-label">Estado</label>
-                            <select name="employee_status" class="form-select">
-                                <option value="activo" <?= ($user['employee_status'] ?? 'activo') === 'activo' ? 'selected' : '' ?>>Activo</option>
-                                <option value="inactivo" <?= ($user['employee_status'] ?? '') === 'inactivo' ? 'selected' : '' ?>>Inactivo</option>
-                            </select>
-                        </div>
-                        <?php endif; ?>
+                    <?php if (isset($user)): ?>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Estado del empleado</label>
+                        <select name="employee_status" class="form-select">
+                            <option value="activo" <?= ($user['employee_status'] ?? 'activo') === 'activo' ? 'selected' : '' ?>>Activo</option>
+                            <option value="inactivo" <?= ($user['employee_status'] ?? '') === 'inactivo' ? 'selected' : '' ?>>Inactivo</option>
+                        </select>
+                        <small class="text-muted">Comision y bono se configuran en Empleados > Configuracion (aplica a todos).</small>
                     </div>
+                    <?php endif; ?>
                     <hr>
                     <?php if (isset($user)): ?>
                     <p class="text-muted small">Deja en blanco si no deseas cambiar la contrasena</p>
@@ -73,9 +61,3 @@
         </div>
     </div>
 </div>
-
-<script>
-function toggleEmployeeFields(select) {
-    document.getElementById('employeeFields').style.display = select.value === 'empleado' ? '' : 'none';
-}
-</script>

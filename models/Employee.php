@@ -42,12 +42,15 @@ class Employee
 
     public function addProduction($data)
     {
-        $bonusPer10 = $this->getBonusPer10Units($data['user_id']);
+        $settings = $this->getSettings();
+        $bonusAmount = (float) $settings['bonus_amount'];
+        $bonusEvery = (int) $settings['bonus_every_units'];
+
         $accumulated = $this->getAccumulatedUnits($data['user_id']);
         $newTotal = $accumulated + $data['quantity'];
-        $milestonesBefore = intdiv($accumulated, 10);
-        $milestonesAfter = intdiv($newTotal, 10);
-        $bonusEarned = ($milestonesAfter - $milestonesBefore) * $bonusPer10;
+        $milestonesBefore = intdiv($accumulated, $bonusEvery);
+        $milestonesAfter = intdiv($newTotal, $bonusEvery);
+        $bonusEarned = ($milestonesAfter - $milestonesBefore) * $bonusAmount;
 
         $this->db->getConnection()->beginTransaction();
         try {
@@ -87,7 +90,7 @@ class Employee
                     $data['quantity'],
                     $data['produced_at'],
                     $data['produced_at'],
-                    "Bono por cada 10 unidades producidas",
+                    "Bono cada {$bonusEvery} unidades producidas",
                 ]);
             }
 
@@ -96,6 +99,27 @@ class Employee
         } catch (Exception $e) {
             $this->db->getConnection()->rollBack();
             throw $e;
+        }
+    }
+
+    public function getSettings()
+    {
+        $stmt = $this->db->query("SELECT key_name, key_value FROM settings");
+        $result = ['commission_rate' => '0', 'bonus_amount' => '0', 'bonus_every_units' => '10'];
+        foreach ($stmt->fetchAll() as $row) {
+            $result[$row['key_name']] = $row['key_value'];
+        }
+        return $result;
+    }
+
+    public function saveSettings($data)
+    {
+        $allowed = ['commission_rate', 'bonus_amount', 'bonus_every_units'];
+        foreach ($allowed as $key) {
+            if (isset($data[$key])) {
+                $stmt = $this->db->prepare("INSERT INTO settings (key_name, key_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE key_value = ?");
+                $stmt->execute([$key, $data[$key], $data[$key]]);
+            }
         }
     }
 
@@ -108,14 +132,6 @@ class Employee
         );
         $stmt->execute([$productId]);
         return $stmt->fetchAll();
-    }
-
-    private function getBonusPer10Units($userId)
-    {
-        $stmt = $this->db->prepare("SELECT bonus_per_10_units FROM users WHERE id = ?");
-        $stmt->execute([$userId]);
-        $row = $stmt->fetch();
-        return $row ? (float) $row['bonus_per_10_units'] : 0;
     }
 
     public function getAccumulatedUnits($userId)

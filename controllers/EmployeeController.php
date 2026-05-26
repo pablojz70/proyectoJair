@@ -19,6 +19,7 @@ class EmployeeController
         $employees = $this->model->getAll($search);
         $period = $_GET['period'] ?? 'all';
         $report = $this->model->getProductionReport($period);
+        $settings = $this->model->getSettings();
 
         ob_start();
         require __DIR__ . '/../views/employees/index.php';
@@ -32,6 +33,7 @@ class EmployeeController
     {
         $employees = $this->model->getAll();
         $compoundProducts = $this->productModel->getAll(null, 'compuesto');
+        $settings = $this->model->getSettings();
         $pageTitle = 'Registrar Produccion';
 
         ob_start();
@@ -118,6 +120,35 @@ class EmployeeController
         require __DIR__ . '/../views/layouts/header.php';
         echo $content;
         require __DIR__ . '/../views/layouts/footer.php';
+    }
+
+    public function settings()
+    {
+        Session::requireAdmin();
+        $pageTitle = 'Configuracion de Empleados';
+        $settings = $this->model->getSettings();
+
+        ob_start();
+        require __DIR__ . '/../views/employees/settings.php';
+        $content = ob_get_clean();
+        require __DIR__ . '/../views/layouts/header.php';
+        echo $content;
+        require __DIR__ . '/../views/layouts/footer.php';
+    }
+
+    public function saveSettings()
+    {
+        Session::requireAdmin();
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirect(BASE_URL . '/employees/settings');
+
+        $this->model->saveSettings([
+            'commission_rate' => (float) ($_POST['commission_rate'] ?? 0),
+            'bonus_amount' => (float) ($_POST['bonus_amount'] ?? 0),
+            'bonus_every_units' => (int) ($_POST['bonus_every_units'] ?? 10),
+        ]);
+
+        alert_success('Configuracion guardada exitosamente');
+        redirect(BASE_URL . '/employees/settings');
     }
 
     public function doPayment()

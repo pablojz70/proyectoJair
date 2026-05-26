@@ -6,6 +6,12 @@
         </div>
     </div>
     <div class="card-body">
+        <div class="alert alert-info py-2 small">
+            <i class="bi bi-info-circle me-1"></i>
+            Comision global: <strong><?= $settings['commission_rate'] ?>%</strong> |
+            Bono: <strong>$<?= number_format($settings['bonus_amount'], 2) ?></strong> cada <strong><?= (int)$settings['bonus_every_units'] ?></strong> unidades |
+            <a href="<?= BASE_URL ?>/employees/settings" class="text-decoration-none">Configurar</a>
+        </div>
         <form method="GET" class="row g-2 mb-3">
             <div class="col-auto flex-grow-1">
                 <input type="text" name="search" class="form-control" placeholder="Buscar..." value="<?= h($_GET['search'] ?? '') ?>">
@@ -17,10 +23,10 @@
         </form>
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead><tr><th>Nombre</th><th>Usuario</th><th>Telefono</th><th>Email</th><th>Comision</th><th>Bono c/10</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <thead><tr><th>Nombre</th><th>Usuario</th><th>Telefono</th><th>Email</th><th>Estado</th><th>Acciones</th></tr></thead>
                 <tbody>
                     <?php if (empty($employees)): ?>
-                    <tr><td colspan="8" class="text-center py-4 text-muted"><i class="bi bi-inbox me-2"></i>No hay empleados</td></tr>
+                    <tr><td colspan="6" class="text-center py-4 text-muted"><i class="bi bi-inbox me-2"></i>No hay empleados</td></tr>
                     <?php else: ?>
                     <?php foreach ($employees as $e): ?>
                     <tr>
@@ -28,8 +34,6 @@
                         <td><strong><?= h($e['username']) ?></strong></td>
                         <td><?= h($e['phone'] ?? '-') ?></td>
                         <td><?= h($e['email']) ?></td>
-                        <td><?= $e['commission_rate'] ?>%</td>
-                        <td>$<?= number_format($e['bonus_per_10_units'], 2) ?></td>
                         <td><?= $e['employee_status'] === 'activo' ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>' ?></td>
                         <td>
                             <a href="<?= BASE_URL ?>/users/edit/<?= $e['id'] ?>" class="btn btn-sm btn-outline-primary btn-icon" title="Editar"><i class="bi bi-pencil"></i></a>

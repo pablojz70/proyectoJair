@@ -118,6 +118,11 @@
                         <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Pagos
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/employees/settings" class="nav-link <?= $controller === 'employees' && $action === 'settings' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Configuracion
+                    </a>
+                </li>
 
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Finanzas</small>

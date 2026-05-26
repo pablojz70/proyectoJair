@@ -47,8 +47,6 @@ class UserController
             'phone' => trim($_POST['phone'] ?? ''),
             'password' => $_POST['password'] ?? '',
             'role' => $role,
-            'commission_rate' => $role === 'empleado' ? (float) ($_POST['commission_rate'] ?? 0) : 0,
-            'bonus_per_10_units' => $role === 'empleado' ? (float) ($_POST['bonus_per_10_units'] ?? 0) : 0,
         ];
 
         $errors = [];
@@ -116,8 +114,6 @@ class UserController
             'phone' => trim($_POST['phone'] ?? ''),
             'password' => $_POST['password'] ?? '',
             'role' => $role,
-            'commission_rate' => $role === 'empleado' ? (float) ($_POST['commission_rate'] ?? 0) : 0,
-            'bonus_per_10_units' => $role === 'empleado' ? (float) ($_POST['bonus_per_10_units'] ?? 0) : 0,
             'employee_status' => $_POST['employee_status'] ?? 'activo',
         ];
 

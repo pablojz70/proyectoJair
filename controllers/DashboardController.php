@@ -13,6 +13,7 @@ class DashboardController
         $exchangeRate = ExchangeRate::getRateQuick();
             $employeeModel = new Employee();
             $employee = $employeeModel->findById($userId);
+            $settings = $employeeModel->getSettings();
             $production = $employeeModel->getProduction($userId, 10);
             $payments = $employeeModel->getPayments($userId, 10);
             $accumulated = $employeeModel->getAccumulatedUnits($userId);
