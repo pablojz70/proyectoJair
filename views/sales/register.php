@@ -22,12 +22,18 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Empleado</label>
+                    <label class="form-label">Vendedor / Empleado</label>
                     <select name="employee_id" class="form-select">
-                        <option value="">Ninguno</option>
+                        <option value="">Seleccionar...</option>
                         <?php foreach ($employees as $emp): ?>
-                        <?php if ($emp['status'] === 'activo'): ?>
-                        <option value="<?= $emp['id'] ?>"><?= h($emp['name']) ?></option>
+                        <?php
+                        $isActive = ($emp['role'] === 'empleado' && ($emp['employee_status'] ?? 'activo') === 'activo') || $emp['role'] === 'vendedor';
+                        $isMe = (int)Session::get('user_id') === (int)$emp['id'];
+                        ?>
+                        <?php if ($isActive || $isMe): ?>
+                        <option value="<?= $emp['id'] ?>" <?= $isMe ? 'selected' : '' ?>>
+                            <?= h($emp['name']) ?> (<?= ucfirst($emp['role']) ?>)
+                        </option>
                         <?php endif; ?>
                         <?php endforeach; ?>
                     </select>

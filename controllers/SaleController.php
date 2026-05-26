@@ -46,7 +46,8 @@ class SaleController
         $clients = $this->clientModel->getAll($userId);
         $products = $this->productModel->getAvailableProducts($userId);
         $exchangeRate = ExchangeRate::getRate();
-        $employees = $this->employeeModel->getAll();
+        $db = Database::getInstance();
+        $employees = $db->query("SELECT id, name, role, employee_status FROM users WHERE role IN ('empleado','vendedor') ORDER BY name ASC")->fetchAll();
 
         ob_start();
         require __DIR__ . '/../views/sales/register.php';
