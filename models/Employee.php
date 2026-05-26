@@ -63,9 +63,12 @@ class Employee
                 $data['notes'] ?? null,
             ]);
 
+            $pYield = $this->db->prepare("SELECT recipe_yield FROM products WHERE id = ?");
+            $pYield->execute([$data['product_id']]);
+            $yield = (int) ($pYield->fetchColumn() ?: 1);
             $recipeItems = $this->getProductRecipe($data['product_id']);
             foreach ($recipeItems as $recipe) {
-                $deductQty = $recipe['quantity'] * $data['quantity'];
+                $deductQty = ($recipe['quantity'] / $yield) * $data['quantity'];
                 $rmStmt = $this->db->prepare("UPDATE raw_materials SET stock = stock - ? WHERE id = ? AND stock >= ?");
                 $result = $rmStmt->execute([$deductQty, $recipe['raw_material_id'], $deductQty]);
                 if ($rmStmt->rowCount() === 0) {

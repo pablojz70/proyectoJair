@@ -104,9 +104,12 @@ class Sale
                     $pStmt = $this->db->prepare("UPDATE products SET stock = stock - ? WHERE id = ?");
                     $pStmt->execute([$item['quantity'], $item['product_id']]);
                 } else {
+                    $pYield = $this->db->prepare("SELECT recipe_yield FROM products WHERE id = ?");
+                    $pYield->execute([$item['product_id']]);
+                    $yield = (int) ($pYield->fetchColumn() ?: 1);
                     $recipeItems = $this->getProductRecipe($item['product_id']);
                     foreach ($recipeItems as $recipe) {
-                        $deductQty = $recipe['quantity'] * $item['quantity'];
+                        $deductQty = ($recipe['quantity'] / $yield) * $item['quantity'];
                         $rmStmt = $this->db->prepare("UPDATE raw_materials SET stock = stock - ? WHERE id = ? AND stock >= ?");
                         $result = $rmStmt->execute([$deductQty, $recipe['raw_material_id'], $deductQty]);
                         if ($rmStmt->rowCount() === 0) {

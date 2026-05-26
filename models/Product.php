@@ -44,7 +44,7 @@ class Product
     public function create($data)
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO products (user_id, name, description, type, stock, sale_price_usd, production_cost_usd) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            "INSERT INTO products (user_id, name, description, type, stock, sale_price_usd, production_cost_usd, recipe_yield) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         );
         $stmt->execute([
             $data['user_id'],
@@ -54,14 +54,15 @@ class Product
             $data['type'] === 'simple' ? ($data['stock'] ?? 0) : null,
             $data['sale_price_usd'],
             $data['production_cost_usd'] ?? null,
+            $data['recipe_yield'] ?? 1,
         ]);
         return $this->db->lastInsertId();
     }
 
     public function update($id, $data)
     {
-        $sql = "UPDATE products SET name = ?, description = ?, sale_price_usd = ?";
-        $params = [$data['name'], $data['description'] ?? null, $data['sale_price_usd']];
+        $sql = "UPDATE products SET name = ?, description = ?, sale_price_usd = ?, recipe_yield = ?";
+        $params = [$data['name'], $data['description'] ?? null, $data['sale_price_usd'], $data['recipe_yield'] ?? 1];
 
         if ($data['type'] === 'simple') {
             $sql .= ", stock = ?";
@@ -123,7 +124,11 @@ class Product
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$productId]);
         $result = $stmt->fetch();
-        return $result['total_cost'] ?? 0;
+        $totalCost = $result['total_cost'] ?? 0;
+
+        $product = $this->findById($productId);
+        $yield = (int) ($product['recipe_yield'] ?? 1);
+        return $yield > 0 ? $totalCost / $yield : $totalCost;
     }
 
     public function updateProductionCost($productId)
@@ -135,11 +140,13 @@ class Product
 
     public function checkRecipeStock($productId, $quantity = 1)
     {
+        $product = $this->findById($productId);
+        $yield = (int) ($product['recipe_yield'] ?? 1);
         $recipe = $this->getRecipe($productId);
         $missing = [];
 
         foreach ($recipe as $item) {
-            $needed = $item['quantity'] * $quantity;
+            $needed = ($item['quantity'] / $yield) * $quantity;
             if ($item['material_stock'] < $needed) {
                 $missing[] = [
                     'name' => $item['material_name'],

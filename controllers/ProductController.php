@@ -62,6 +62,7 @@ class ProductController
             $data['stock'] = (float) ($_POST['stock'] ?? 0);
         } else {
             $data['stock'] = null;
+            $data['recipe_yield'] = (int) ($_POST['recipe_yield'] ?? 1);
         }
 
         if (empty($data['name'])) {
@@ -140,6 +141,7 @@ class ProductController
             'description' => trim($_POST['description'] ?? ''),
             'type' => $product['type'],
             'sale_price_usd' => (float) ($_POST['sale_price_usd'] ?? 0),
+            'recipe_yield' => $product['type'] === 'compuesto' ? (int) ($_POST['recipe_yield'] ?? 1) : 1,
         ];
 
         if ($product['type'] === 'simple') {

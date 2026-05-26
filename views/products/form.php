@@ -37,9 +37,14 @@
                         <?php endif; ?>
                     </div>
 
-                    <?php if (isset($product) && $product['type'] === 'compuesto'): ?>
+                    <?php if ($product['type'] ?? $type === 'compuesto'): ?>
+                    <div class="mb-3">
+                        <label class="form-label">Esta receta produce (cantidad de unidades)</label>
+                        <input type="number" name="recipe_yield" class="form-control" value="<?= $product['recipe_yield'] ?? old('recipe_yield', '1') ?>" min="1" required>
+                        <small class="text-muted">Ej: si la receta usa ingredientes para 10 tortas, pon 10</small>
+                    </div>
                     <hr>
-                    <h6 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Receta (ingredientes)</h6>
+                    <h6 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Ingredientes (para las <?= $product['recipe_yield'] ?? 1 ?> unidades)</h6>
                     <div id="recipeContainer">
                         <?php if (isset($recipe) && !empty($recipe)): ?>
                         <?php foreach ($recipe as $i => $item): ?>
