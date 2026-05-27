@@ -18,14 +18,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener('click', toggleSidebar);
-        sidebar.querySelectorAll('.nav-link').forEach(function (link) {
-            link.addEventListener('click', function (e) {
-                if (window.innerWidth >= 992) return;
-                var isCollapse = this.getAttribute('data-bs-toggle') === 'collapse';
-                if (!isCollapse) {
-                    closeSidebar();
-                }
-            });
+        sidebar.addEventListener('click', function (e) {
+            if (window.innerWidth >= 992) return;
+            var link = e.target.closest('.nav-link');
+            if (!link) return;
+            if (link.hasAttribute('data-bs-toggle')) return;
+            if (link.getAttribute('href') && link.getAttribute('href').charAt(0) === '#') return;
+            closeSidebar();
         });
     }
 
