@@ -22,23 +22,6 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">Vendedor / Empleado</label>
-                    <select name="employee_id" class="form-select">
-                        <option value="">Seleccionar...</option>
-                        <?php foreach ($employees as $emp): ?>
-                        <?php
-                        $isActive = ($emp['role'] === 'empleado' && ($emp['employee_status'] ?? 'activo') === 'activo') || $emp['role'] === 'vendedor';
-                        $isMe = (int)Session::get('user_id') === (int)$emp['id'];
-                        ?>
-                        <?php if ($isActive || $isMe): ?>
-                        <option value="<?= $emp['id'] ?>" <?= $isMe ? 'selected' : '' ?>>
-                            <?= h($emp['name']) ?> (<?= ucfirst($emp['role']) ?>)
-                        </option>
-                        <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="col-md-2">
                     <label class="form-label">Tipo de venta</label>
                     <select name="sale_type" class="form-select" id="saleType">
                         <option value="contado">Contado</option>
@@ -58,6 +41,23 @@
                         </button>
                     </div>
                     <input type="number" name="manual_rate" class="form-control mt-1" id="manualRate" style="display:none" placeholder="Tasa manual" step="0.01">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Vendedor / Empleado</label>
+                    <select name="employee_id" class="form-select">
+                        <option value="">Seleccionar...</option>
+                        <?php foreach ($employees as $emp): ?>
+                        <?php
+                        $isActive = ($emp['role'] === 'empleado' && ($emp['employee_status'] ?? 'activo') === 'activo') || $emp['role'] === 'vendedor';
+                        $isMe = (int)Session::get('user_id') === (int)$emp['id'];
+                        ?>
+                        <?php if ($isActive || $isMe): ?>
+                        <option value="<?= $emp['id'] ?>" <?= $isMe ? 'selected' : '' ?>>
+                            <?= h($emp['name']) ?> (<?= ucfirst($emp['role']) ?>)
+                        </option>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
             </div>
 
