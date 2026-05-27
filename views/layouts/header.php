@@ -164,27 +164,6 @@
                         'dashboard' => 'dashboard',
                         'clients' => 'clientes',
                         'raw-materials' => 'materia',
-            <div class="p-3 border-top border-secondary">
-                <a href="#" id="installAppBtn" class="btn btn-outline-light btn-sm w-100 mb-2" style="display:none">
-                    <i class="bi bi-download me-2"></i>Instalar App
-                </a>
-                <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-outline-light btn-sm w-100">
-                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesion
-                </a>
-            </div>
-        </div>
-
-        <div id="page-content-wrapper" class="w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3">
-                <button class="btn btn-sm btn-outline-secondary" id="sidebarToggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <span class="ms-2 fw-bold text-truncate" style="max-width:40vw">
-                    <?php
-                    $iconMap = [
-                        'dashboard' => 'dashboard',
-                        'clients' => 'clientes',
-                        'raw-materials' => 'materia',
                         'products' => 'producto',
                         'sales' => in_array($action, ['register']) ? 'venta' : 'historial',
                         'payments' => 'pagos',
