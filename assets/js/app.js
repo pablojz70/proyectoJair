@@ -48,25 +48,31 @@ document.addEventListener('DOMContentLoaded', function () {
     window.addEventListener('beforeinstallprompt', function (e) {
         e.preventDefault();
         deferredPrompt = e;
-        var btn = document.getElementById('installAppBtn');
-        if (btn) btn.style.display = 'block';
+        showInstallButtons();
     });
 
-    var installBtn = document.getElementById('installAppBtn');
-    if (installBtn) {
-        installBtn.addEventListener('click', function () {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function () {
-                    deferredPrompt = null;
-                    installBtn.style.display = 'none';
-                });
-            }
-        });
+    function showInstallButtons() {
+        var btns = document.querySelectorAll('#installAppBtn, #installAppBtnMobile');
+        btns.forEach(function(b) { b.style.display = ''; });
     }
 
+    function hideInstallButtons() {
+        var btns = document.querySelectorAll('#installAppBtn, #installAppBtnMobile');
+        btns.forEach(function(b) { b.style.display = 'none'; });
+    }
+
+    document.addEventListener('click', function(e) {
+        var btn = e.target.closest('#installAppBtn, #installAppBtnMobile');
+        if (btn && deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function () {
+                deferredPrompt = null;
+                hideInstallButtons();
+            });
+        }
+    });
+
     window.addEventListener('appinstalled', function () {
-        var btn = document.getElementById('installAppBtn');
-        if (btn) btn.style.display = 'none';
+        hideInstallButtons();
     });
 });

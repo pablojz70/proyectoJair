@@ -170,6 +170,9 @@
                     <?= h($pageTitle ?? 'Inicio') ?>
                 </span>
                 <div class="ms-auto text-muted small d-flex align-items-center gap-1">
+                    <a href="#" id="installAppBtnMobile" class="btn btn-sm btn-outline-success d-md-none py-0 px-1" style="font-size:0.75rem;display:none" title="Instalar App">
+                        <i class="bi bi-download"></i>
+                    </a>
                     <span class="d-none d-sm-inline">
                         <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon-sm me-1"><?= h(Session::get('user_name')) ?>
                     </span>
