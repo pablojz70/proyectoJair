@@ -50,9 +50,11 @@
                             <a href="<?= BASE_URL ?>/clients/history/<?= $client['id'] ?>" class="btn btn-sm btn-outline-info btn-icon" title="Historial">
                                 <i class="bi bi-clock-history"></i>
                             </a>
+                            <?php if (Session::isAdmin()): ?>
                             <a href="<?= BASE_URL ?>/clients/delete/<?= $client['id'] ?>" class="btn btn-sm btn-outline-danger btn-icon" title="Eliminar" onclick="return confirm('Eliminar este cliente?')">
                                 <i class="bi bi-trash"></i>
                             </a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
