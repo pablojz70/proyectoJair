@@ -47,7 +47,7 @@
                     </a>
                 </li>
 
-                <?php if ($isAdmin || $isVendedor): ?>
+                <?php if ($isAdmin): ?>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#menuProductos" role="button" aria-expanded="<?= in_array($controller, ['raw-materials','products']) ? 'true' : 'false' ?>">
                         <img src="<?= BASE_URL ?>/imagen/producto.png" class="sidebar-icon me-2">Productos <i class="bi bi-chevron-down float-end"></i>
