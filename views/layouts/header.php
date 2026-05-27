@@ -25,14 +25,18 @@
                     <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon-sm me-1"><?= h(Session::get('user_name')) ?>
                 </a>
             </div>
+            <?php
+            $role = Session::get('user_role');
+            $isVendedor = $role === 'vendedor';
+            $isEmpleado = $role === 'empleado';
+            $isAdmin = $role === 'admin';
+            ?>
             <ul class="nav nav-pills flex-column mb-auto p-2">
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/dashboard" class="nav-link <?= $controller === 'dashboard' ? 'active' : '' ?>">
                         <img src="<?= BASE_URL ?>/imagen/dashboard.png" class="sidebar-icon me-2">Inicio
                     </a>
                 </li>
-
-                <?php if (Session::get('user_role') !== 'empleado'): ?>
 
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Clientes</small>
@@ -43,6 +47,18 @@
                     </a>
                 </li>
 
+                <?php if ($isEmpleado): ?>
+                <li class="nav-item mt-2">
+                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
+                    </a>
+                </li>
+                <?php endif; ?>
+
+                <?php if (!$isEmpleado): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Productos</small>
                 </li>
@@ -56,6 +72,7 @@
                         <img src="<?= BASE_URL ?>/imagen/producto.png" class="sidebar-icon me-2">Productos
                     </a>
                 </li>
+                <?php endif; ?>
 
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Ventas</small>
@@ -71,6 +88,7 @@
                     </a>
                 </li>
 
+                <?php if (!$isEmpleado): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Cobranzas</small>
                 </li>
@@ -88,42 +106,9 @@
                         <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Reportes
                     </a>
                 </li>
-
                 <?php endif; ?>
 
-                <?php if (Session::get('user_role') === 'empleado'): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Clientes</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/clients" class="nav-link <?= $controller === 'clients' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/clientes.png" class="sidebar-icon me-2">Clientes
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
-                    </a>
-                </li>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Ventas</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/sales/register" class="nav-link <?= $controller === 'sales' && $action === 'register' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/venta.png" class="sidebar-icon me-2">Nueva Venta
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/sales" class="nav-link <?= $controller === 'sales' && $action === 'index' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/historial.png" class="sidebar-icon me-2">Historial
-                    </a>
-                </li>
-                <?php endif; ?>
-
-                <?php if (Session::isAdmin()): ?>
+                <?php if ($isAdmin): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Empleados</small>
                 </li>
