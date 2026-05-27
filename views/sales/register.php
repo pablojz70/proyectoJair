@@ -32,32 +32,39 @@
                     <label class="form-label">Fecha vencimiento</label>
                     <input type="date" name="due_date" class="form-control" id="dueDate">
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Tasa Bs/USD</label>
-                    <div class="input-group">
-                        <input type="number" name="exchange_rate" class="form-control" id="exchangeRate" value="<?= $exchangeRate ?: '' ?>" step="0.01" readonly>
-                        <button type="button" class="btn btn-outline-secondary" title="Editar tasa" id="editRateBtn">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                    </div>
-                    <input type="number" name="manual_rate" class="form-control mt-1" id="manualRate" style="display:none" placeholder="Tasa manual" step="0.01">
+                <div class="col-12 d-md-none mb-2">
+                    <button class="btn btn-sm btn-outline-secondary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#extraSaleFields" aria-expanded="false">
+                        <i class="bi bi-three-dots me-1"></i>Opciones avanzadas (Tasa, Vendedor)
+                    </button>
                 </div>
-                <div class="col-md-2">
-                    <label class="form-label">Vendedor / Empleado</label>
-                    <select name="employee_id" class="form-select">
-                        <option value="">Seleccionar...</option>
-                        <?php foreach ($employees as $emp): ?>
-                        <?php
-                        $isActive = ($emp['role'] === 'empleado' && ($emp['employee_status'] ?? 'activo') === 'activo') || $emp['role'] === 'vendedor';
-                        $isMe = (int)Session::get('user_id') === (int)$emp['id'];
-                        ?>
-                        <?php if ($isActive || $isMe): ?>
-                        <option value="<?= $emp['id'] ?>" <?= $isMe ? 'selected' : '' ?>>
-                            <?= h($emp['name']) ?> (<?= ucfirst($emp['role']) ?>)
-                        </option>
-                        <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="collapse d-md-flex" id="extraSaleFields">
+                    <div class="col-md-3 pe-md-2">
+                        <label class="form-label">Tasa Bs/USD</label>
+                        <div class="input-group">
+                            <input type="number" name="exchange_rate" class="form-control" id="exchangeRate" value="<?= $exchangeRate ?: '' ?>" step="0.01" readonly>
+                            <button type="button" class="btn btn-outline-secondary" title="Editar tasa" id="editRateBtn">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
+                        <input type="number" name="manual_rate" class="form-control mt-1" id="manualRate" style="display:none" placeholder="Tasa manual" step="0.01">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Vendedor / Empleado</label>
+                        <select name="employee_id" class="form-select">
+                            <option value="">Seleccionar...</option>
+                            <?php foreach ($employees as $emp): ?>
+                            <?php
+                            $isActive = ($emp['role'] === 'empleado' && ($emp['employee_status'] ?? 'activo') === 'activo') || $emp['role'] === 'vendedor';
+                            $isMe = (int)Session::get('user_id') === (int)$emp['id'];
+                            ?>
+                            <?php if ($isActive || $isMe): ?>
+                            <option value="<?= $emp['id'] ?>" <?= $isMe ? 'selected' : '' ?>>
+                                <?= h($emp['name']) ?> (<?= ucfirst($emp['role']) ?>)
+                            </option>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
             </div>
 
