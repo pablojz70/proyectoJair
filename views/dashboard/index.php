@@ -71,25 +71,6 @@
     </div>
 </div>
 
-<?php if ($totalVendors['count'] > 0): ?>
-<div class="row g-3 mb-4">
-    <div class="col-6 col-lg">
-        <div class="card stat-card primary">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="text-muted text-uppercase">Vendedores</small>
-                        <h4 class="mt-1 mb-0"><?= $totalVendors['count'] ?></h4>
-                        <small class="text-muted">Registrados</small>
-                    </div>
-                    <i class="bi bi-person-badge display-6 text-primary opacity-25"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<?php endif; ?>
-
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
         <span><i class="bi bi-clock-history me-2"></i>Ventas Recientes</span>

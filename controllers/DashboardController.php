@@ -42,7 +42,6 @@ class DashboardController
             $totalSales = $db->query("SELECT COUNT(*) as count, COALESCE(SUM(total_usd),0) as total FROM sales")->fetch();
             $totalClients = $db->query("SELECT COUNT(*) as count FROM clients")->fetch();
             $totalProducts = $db->query("SELECT COUNT(*) as count FROM products")->fetch();
-            $totalVendors = $db->query("SELECT COUNT(*) as count FROM users WHERE role='vendedor'")->fetch();
             $pendingSales = $db->query("SELECT COUNT(*) as count, COALESCE(SUM(total_usd),0) as total FROM sales WHERE status='pendiente'")->fetch();
             $recentSales = $db->query("SELECT s.*, c.full_name as client_name FROM sales s JOIN clients c ON c.id = s.client_id ORDER BY s.created_at DESC LIMIT 5")->fetchAll();
         } else {
@@ -65,8 +64,6 @@ class DashboardController
             $recentSales = $db->prepare("SELECT s.*, c.full_name as client_name FROM sales s JOIN clients c ON c.id = s.client_id WHERE s.user_id = ? ORDER BY s.created_at DESC LIMIT 5");
             $recentSales->execute([$userId]);
             $recentSales = $recentSales->fetchAll();
-
-            $totalVendors = ['count' => 0];
         }
 
         ob_start();
