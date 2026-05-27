@@ -13,11 +13,6 @@ class Product
         $sql = "SELECT p.* FROM products p WHERE 1=1";
         $params = [];
 
-        if ($userId && Session::get('user_role') === 'vendedor') {
-            $sql .= " AND p.user_id = ?";
-            $params[] = $userId;
-        }
-
         if ($type) {
             $sql .= " AND p.type = ?";
             $params[] = $type;
@@ -169,11 +164,6 @@ class Product
         $conditions[] = "p.type = 'compuesto'";
 
         $sql .= "(" . implode(" OR ", $conditions) . ")";
-
-        if ($userId && Session::get('user_role') === 'vendedor') {
-            $sql .= " AND p.user_id = ?";
-            $params[] = $userId;
-        }
 
         $sql .= " ORDER BY p.name ASC";
         $stmt = $this->db->prepare($sql);

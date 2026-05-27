@@ -13,11 +13,6 @@ class Client
         $sql = "SELECT * FROM clients WHERE 1=1";
         $params = [];
 
-        if ($userId && Session::get('user_role') === 'vendedor') {
-            $sql .= " AND user_id = ?";
-            $params[] = $userId;
-        }
-
         if (!empty($search)) {
             $sql .= " AND (full_name LIKE ? OR cedula_rif LIKE ?)";
             $params[] = "%{$search}%";
