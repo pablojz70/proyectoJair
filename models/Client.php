@@ -30,11 +30,6 @@ class Client
         $sql = "SELECT * FROM clients WHERE id = ?";
         $params = [$id];
 
-        if ($userId && Session::get('user_role') === 'vendedor') {
-            $sql .= " AND user_id = ?";
-            $params[] = $userId;
-        }
-
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetch();
@@ -102,11 +97,6 @@ class Client
     {
         $sql = "SELECT s.* FROM sales s WHERE s.client_id = ?";
         $params = [$clientId];
-
-        if ($userId && Session::get('user_role') === 'vendedor') {
-            $sql .= " AND user_id = ?";
-            $params[] = $userId;
-        }
 
         $sql .= " ORDER BY s.created_at DESC";
         $stmt = $this->db->prepare($sql);
