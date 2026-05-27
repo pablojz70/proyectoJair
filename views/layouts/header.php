@@ -28,6 +28,12 @@
             $isEmpleado = $role === 'empleado';
             $isAdmin = $role === 'admin';
             ?>
+            <?php
+            function subActive($ctr, $actions) {
+                global $controller, $action;
+                return in_array($controller, (array)$ctr) && in_array($action, (array)$actions) ? 'active' : '';
+            }
+            ?>
             <ul class="nav nav-pills flex-column mb-auto p-2">
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/dashboard" class="nav-link <?= $controller === 'dashboard' ? 'active' : '' ?>">
@@ -35,47 +41,44 @@
                     </a>
                 </li>
 
-                <?php if ($isAdmin || $isVendedor): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Productos</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/raw-materials" class="nav-link <?= $controller === 'raw-materials' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Materias Primas
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/products" class="nav-link <?= $controller === 'products' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/producto.png" class="sidebar-icon me-2">Productos
-                    </a>
-                </li>
-                <?php endif; ?>
-
-                <?php if ($isEmpleado): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
-                    </a>
-                </li>
-                <?php endif; ?>
-
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/clients" class="nav-link <?= $controller === 'clients' ? 'active' : '' ?>">
                         <img src="<?= BASE_URL ?>/imagen/clientes.png" class="sidebar-icon me-2">Clientes
                     </a>
                 </li>
+
+                <?php if ($isAdmin || $isVendedor): ?>
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/sales/register" class="nav-link <?= $controller === 'sales' && $action === 'register' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/venta.png" class="sidebar-icon me-2">Nueva Venta
+                    <a class="nav-link" data-bs-toggle="collapse" href="#menuProductos" role="button" aria-expanded="<?= in_array($controller, ['raw-materials','products']) ? 'true' : 'false' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/producto.png" class="sidebar-icon me-2">Productos <i class="bi bi-chevron-down float-end"></i>
+                    </a>
+                    <div class="collapse <?= in_array($controller, ['raw-materials','products']) ? 'show' : '' ?>" id="menuProductos">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/raw-materials" class="nav-link py-1 <?= $controller === 'raw-materials' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon-sm me-2">Materias Primas</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/products" class="nav-link py-1 <?= $controller === 'products' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/producto.png" class="sidebar-icon-sm me-2">Productos</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <?php endif; ?>
+
+                <?php if ($isEmpleado): ?>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= subActive('employees', 'production') ?>">
+                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Produccion
                     </a>
                 </li>
+                <?php endif; ?>
+
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/sales" class="nav-link <?= $controller === 'sales' && $action === 'index' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/historial.png" class="sidebar-icon me-2">Historial
+                    <a class="nav-link" data-bs-toggle="collapse" href="#menuVentas" role="button" aria-expanded="<?= in_array($controller, ['sales']) ? 'true' : 'false' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/venta.png" class="sidebar-icon me-2">Ventas <i class="bi bi-chevron-down float-end"></i>
                     </a>
+                    <div class="collapse <?= in_array($controller, ['sales']) ? 'show' : '' ?>" id="menuVentas">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/sales/register" class="nav-link py-1 <?= $controller === 'sales' && $action === 'register' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/venta.png" class="sidebar-icon-sm me-2">Nueva Venta</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/sales" class="nav-link py-1 <?= $controller === 'sales' && $action === 'index' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/historial.png" class="sidebar-icon-sm me-2">Historial</a></li>
+                        </ul>
+                    </div>
                 </li>
 
                 <li class="nav-item">
@@ -93,44 +96,32 @@
                 <?php endif; ?>
 
                 <?php if ($isAdmin): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Empleados</small>
-                </li>
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees" class="nav-link <?= $controller === 'employees' && $action === 'index' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/empleado.png" class="sidebar-icon me-2">Empleados
+                    <a class="nav-link" data-bs-toggle="collapse" href="#menuEmpleados" role="button" aria-expanded="<?= in_array($controller, ['employees']) ? 'true' : 'false' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/empleado.png" class="sidebar-icon me-2">Empleados <i class="bi bi-chevron-down float-end"></i>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Produccion
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/payments" class="nav-link <?= $controller === 'employees' && $action === 'payments' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Pagos
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/settings" class="nav-link <?= $controller === 'employees' && $action === 'settings' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Configuracion
-                    </a>
+                    <div class="collapse <?= in_array($controller, ['employees']) ? 'show' : '' ?>" id="menuEmpleados">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/employees" class="nav-link py-1 <?= $controller === 'employees' && $action === 'index' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/empleado.png" class="sidebar-icon-sm me-2">Empleados</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/employees/production" class="nav-link py-1 <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon-sm me-2">Produccion</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/employees/payments" class="nav-link py-1 <?= $controller === 'employees' && $action === 'payments' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon-sm me-2">Pagos</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/employees/settings" class="nav-link py-1 <?= $controller === 'employees' && $action === 'settings' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon-sm me-2">Configuracion</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <?php endif; ?>
 
                 <?php if ($isAdmin): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Finanzas</small>
-                </li>
                 <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/finances" class="nav-link <?= $controller === 'finances' && $action === 'index' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Quincenas
+                    <a class="nav-link" data-bs-toggle="collapse" href="#menuFinanzas" role="button" aria-expanded="<?= in_array($controller, ['finances']) ? 'true' : 'false' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Finanzas <i class="bi bi-chevron-down float-end"></i>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/finances/expenses" class="nav-link <?= $controller === 'finances' && $action === 'expenses' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Gastos
-                    </a>
+                    <div class="collapse <?= in_array($controller, ['finances']) ? 'show' : '' ?>" id="menuFinanzas">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/finances" class="nav-link py-1 <?= $controller === 'finances' && $action === 'index' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon-sm me-2">Quincenas</a></li>
+                            <li class="nav-item"><a href="<?= BASE_URL ?>/finances/expenses" class="nav-link py-1 <?= $controller === 'finances' && $action === 'expenses' ? 'active' : '' ?>"><img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon-sm me-2">Gastos</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <?php endif; ?>
 
