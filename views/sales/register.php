@@ -131,7 +131,7 @@
                             <td class="fw-bold">Subtotal USD:</td>
                             <td class="text-end" id="subtotalDisplay">$ 0.00</td>
                         </tr>
-                        <tr>
+                        <tr class="d-none d-md-table-row">
                             <td class="fw-bold">Tasa Bs/USD:</td>
                             <td class="text-end" id="rateDisplay"><?= $exchangeRate ? number_format($exchangeRate, 2) : 'N/A' ?></td>
                         </tr>
