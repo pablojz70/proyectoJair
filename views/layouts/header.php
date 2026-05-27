@@ -88,7 +88,7 @@
                     </a>
                 </li>
 
-                <?php if (!$isEmpleado): ?>
+                <?php if ($isAdmin): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Cobranzas</small>
                 </li>
