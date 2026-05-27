@@ -19,9 +19,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener('click', toggleSidebar);
         sidebar.querySelectorAll('.nav-link').forEach(function (link) {
-            link.addEventListener('click', function () {
-                var href = this.getAttribute('href');
-                if (href && href.indexOf('#') !== 0 && window.innerWidth < 992) {
+            link.addEventListener('click', function (e) {
+                if (window.innerWidth >= 992) return;
+                var isCollapse = this.getAttribute('data-bs-toggle') === 'collapse';
+                if (!isCollapse) {
                     closeSidebar();
                 }
             });
