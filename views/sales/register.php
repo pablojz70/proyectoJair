@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header d-none d-md-block">
         <i class="bi bi-cart-plus me-2"></i>Nueva Venta
     </div>
     <div class="card-body">
