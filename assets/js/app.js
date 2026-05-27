@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleBtn.addEventListener('click', toggleSidebar);
         sidebar.querySelectorAll('.nav-link').forEach(function (link) {
             link.addEventListener('click', function () {
-                if (window.innerWidth < 992) closeSidebar();
+                var href = this.getAttribute('href');
+                if (href && href.indexOf('#') !== 0 && window.innerWidth < 992) {
+                    closeSidebar();
+                }
             });
         });
     }
