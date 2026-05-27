@@ -90,22 +90,32 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 col-5">
                         <input type="number" name="quantity[]" class="form-control quantity-input" placeholder="Cantidad" min="1" step="1" required>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 d-none d-md-block">
                         <input type="text" class="form-control unit-price" placeholder="Precio USD" readonly>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 d-none d-md-block">
                         <input type="text" class="form-control unit-cost" placeholder="Costo" readonly style="font-size:0.8rem;color:#6c757d">
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2 d-none d-md-block">
                         <input type="text" class="form-control subtotal" placeholder="Subtotal" readonly>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-1 col-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-info btn-sm w-100 toggle-detail d-md-none" title="Ver detalle">
+                            <i class="bi bi-eye"></i>
+                        </button>
                         <button type="button" class="btn btn-outline-danger btn-sm remove-product" disabled>
                             <i class="bi bi-x"></i>
                         </button>
+                    </div>
+                    <div class="col-12 d-none mobile-detail">
+                        <div class="row g-1 mt-1">
+                            <div class="col-4"><input type="text" class="form-control form-control-sm unit-price" placeholder="Precio USD" readonly></div>
+                            <div class="col-3"><input type="text" class="form-control form-control-sm unit-cost" placeholder="Costo" readonly style="font-size:0.8rem;color:#6c757d"></div>
+                            <div class="col-5"><input type="text" class="form-control form-control-sm subtotal" placeholder="Subtotal" readonly></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -198,10 +208,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('change', function(e) {
         if (e.target.classList.contains('product-select')) {
             const row = e.target.closest('.product-row');
-            const price = e.target.selectedOptions[0]?.dataset.price || 0;
-            const cost = e.target.selectedOptions[0]?.dataset.cost || 0;
-            row.querySelector('.unit-price').value = '$ ' + parseFloat(price).toFixed(2);
-            row.querySelector('.unit-cost').value = '$ ' + parseFloat(cost).toFixed(2);
             updateRowSubtotal(row);
             updateTotals();
         }
@@ -228,8 +234,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const select = row.querySelector('.product-select');
         const qty = parseFloat(row.querySelector('.quantity-input').value) || 0;
         const price = parseFloat(select.selectedOptions[0]?.dataset.price || 0);
+        const cost = parseFloat(select.selectedOptions[0]?.dataset.cost || 0);
         const subtotal = qty * price;
-        row.querySelector('.subtotal').value = '$ ' + subtotal.toFixed(2);
+        row.querySelectorAll('.unit-price').forEach(function(el) { el.value = '$ ' + price.toFixed(2); });
+        row.querySelectorAll('.unit-cost').forEach(function(el) { el.value = '$ ' + cost.toFixed(2); });
+        row.querySelectorAll('.subtotal').forEach(function(el) { el.value = '$ ' + subtotal.toFixed(2); });
     }
 
     document.getElementById('addProduct').addEventListener('click', function() {
@@ -243,6 +252,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.addEventListener('click', function(e) {
+        if (e.target.closest('.toggle-detail')) {
+            var row = e.target.closest('.product-row');
+            var detail = row.querySelector('.mobile-detail');
+            if (detail) detail.classList.toggle('d-none');
+        }
         if (e.target.closest('.remove-product')) {
             const rows = document.querySelectorAll('.product-row');
             if (rows.length > 1) {
