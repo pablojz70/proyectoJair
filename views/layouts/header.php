@@ -21,9 +21,6 @@
         <div class="sidebar sidebar-gradient" id="sidebar">
             <div class="sidebar-header p-3 border-bottom border-secondary">
                 <h5 class="mb-0"><img src="<?= BASE_URL ?>/imagen/ventas..png" class="sidebar-icon me-2">Ventas</h5>
-                <a href="<?= BASE_URL ?>/auth/profile" class="text-decoration-none text-dark small d-block mt-1">
-                    <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon-sm me-1"><?= h(Session::get('user_name')) ?>
-                </a>
             </div>
             <?php
             $role = Session::get('user_role');
