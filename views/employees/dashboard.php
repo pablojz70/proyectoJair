@@ -1,32 +1,32 @@
 <div class="row g-3 mb-4">
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card" style="border-left:4px solid #0dcaf0"><div class="card-body">
             <small class="text-muted text-uppercase">Tasa BCV</small>
             <h4 class="mt-1">Bs. <?= number_format($exchangeRate ?: 0, 2) ?></h4>
         </div></div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card primary"><div class="card-body">
             <small class="text-muted text-uppercase">Hoy</small>
             <h4 class="mt-1"><?= $todayStats['total_qty'] ?> unid.</h4>
             <small class="text-muted">$<?= number_format($todayStats['total_bonus'], 2) ?> en bonos</small>
         </div></div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card success"><div class="card-body">
             <small class="text-muted text-uppercase">Semana</small>
             <h4 class="mt-1"><?= $weekStats['total_qty'] ?> unid.</h4>
             <small class="text-muted">$<?= number_format($weekStats['total_bonus'], 2) ?> en bonos</small>
         </div></div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card info"><div class="card-body">
             <small class="text-muted text-uppercase">Mes</small>
             <h4 class="mt-1"><?= $monthStats['total_qty'] ?> unid.</h4>
             <small class="text-muted">$<?= number_format($monthStats['total_bonus'], 2) ?> en bonos</small>
         </div></div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card warning"><div class="card-body">
             <small class="text-muted text-uppercase">Total</small>
             <h4 class="mt-1"><?= $accumulated ?> unid.</h4>

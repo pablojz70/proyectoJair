@@ -1,5 +1,5 @@
 <div class="row g-3 mb-4">
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card" style="border-left:4px solid #0dcaf0">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card primary">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -27,7 +27,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card success">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -41,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card warning">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -55,7 +55,7 @@
             </div>
         </div>
     </div>
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card info">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
@@ -73,7 +73,7 @@
 
 <?php if ($totalVendors['count'] > 0): ?>
 <div class="row g-3 mb-4">
-    <div class="col-4 col-md-3">
+    <div class="col-6 col-lg">
         <div class="card stat-card primary">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
