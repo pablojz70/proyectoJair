@@ -35,27 +35,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Clientes</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/clients" class="nav-link <?= $controller === 'clients' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/clientes.png" class="sidebar-icon me-2">Clientes
-                    </a>
-                </li>
-
-                <?php if ($isEmpleado): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
-                </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
-                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
-                    </a>
-                </li>
-                <?php endif; ?>
-
-                <?php if ($isAdmin): ?>
+                <?php if ($isAdmin || $isVendedor): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Productos</small>
                 </li>
@@ -71,8 +51,21 @@
                 </li>
                 <?php endif; ?>
 
+                <?php if ($isEmpleado): ?>
                 <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Ventas</small>
+                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/employees/production" class="nav-link <?= $controller === 'employees' && $action === 'production' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/materia.png" class="sidebar-icon me-2">Registrar
+                    </a>
+                </li>
+                <?php endif; ?>
+
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/clients" class="nav-link <?= $controller === 'clients' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/clientes.png" class="sidebar-icon me-2">Clientes
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/sales/register" class="nav-link <?= $controller === 'sales' && $action === 'register' ? 'active' : '' ?>">
@@ -85,9 +78,6 @@
                     </a>
                 </li>
 
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Cobranzas</small>
-                </li>
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/payments" class="nav-link <?= $controller === 'payments' ? 'active' : '' ?>">
                         <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Pagos Clientes
@@ -95,9 +85,6 @@
                 </li>
 
                 <?php if ($isAdmin): ?>
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Reportes</small>
-                </li>
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/reports" class="nav-link <?= $controller === 'reports' ? 'active' : '' ?>">
                         <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Reportes
@@ -129,7 +116,9 @@
                         <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Configuracion
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <?php if ($isAdmin): ?>
                 <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Finanzas</small>
                 </li>
@@ -143,10 +132,9 @@
                         <img src="<?= BASE_URL ?>/imagen/pagos.png" class="sidebar-icon me-2">Gastos
                     </a>
                 </li>
+                <?php endif; ?>
 
-                <li class="nav-item mt-2">
-                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Admin</small>
-                </li>
+                <?php if ($isAdmin): ?>
                 <li class="nav-item">
                     <a href="<?= BASE_URL ?>/users" class="nav-link <?= $controller === 'users' ? 'active' : '' ?>">
                         <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon me-2">Usuarios
@@ -154,6 +142,28 @@
                 </li>
                 <?php endif; ?>
             </ul>
+
+            <div class="p-3 border-top border-secondary">
+                <a href="#" id="installAppBtn" class="btn btn-outline-light btn-sm w-100 mb-2" style="display:none">
+                    <i class="bi bi-download me-2"></i>Instalar App
+                </a>
+                <a href="<?= BASE_URL ?>/auth/logout" class="btn btn-outline-light btn-sm w-100">
+                    <i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesion
+                </a>
+            </div>
+        </div>
+
+        <div id="page-content-wrapper" class="w-100">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom px-3">
+                <button class="btn btn-sm btn-outline-secondary" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="ms-2 fw-bold text-truncate" style="max-width:40vw">
+                    <?php
+                    $iconMap = [
+                        'dashboard' => 'dashboard',
+                        'clients' => 'clientes',
+                        'raw-materials' => 'materia',
             <div class="p-3 border-top border-secondary">
                 <a href="#" id="installAppBtn" class="btn btn-outline-light btn-sm w-100 mb-2" style="display:none">
                     <i class="bi bi-download me-2"></i>Instalar App
