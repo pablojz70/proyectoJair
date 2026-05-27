@@ -24,7 +24,7 @@ class Payment
                 WHERE s.client_id = ?";
         $params = [$clientId];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND s.user_id = ?";
             $params[] = $userId;
         }
@@ -85,7 +85,7 @@ class Payment
                 WHERE s.sale_type = 'credito' AND s.status != 'pagada'";
         $params = [];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND s.user_id = ?";
             $params[] = $userId;
         }
@@ -104,7 +104,7 @@ class Payment
                 WHERE s.client_id = ? AND s.sale_type = 'credito' AND s.status != 'pagada'";
         $params = [$clientId];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND s.user_id = ?";
             $params[] = $userId;
         }
@@ -121,7 +121,7 @@ class Payment
                 FROM payments p JOIN sales s ON s.id = p.sale_id WHERE 1=1";
         $params = [];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND s.user_id = ?";
             $params[] = $userId;
         }

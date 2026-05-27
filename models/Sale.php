@@ -13,7 +13,7 @@ class Sale
         $sql = "SELECT s.*, c.full_name as client_name, e.name as employee_name FROM sales s JOIN clients c ON c.id = s.client_id LEFT JOIN users e ON e.id = s.employee_id WHERE 1=1";
         $params = [];
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND s.user_id = ?";
             $params[] = $userId;
         }
@@ -168,7 +168,7 @@ class Sale
                 $sql .= "1=1";
         }
 
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $sql .= " AND user_id = ?";
             $params[] = $userId;
         }
@@ -184,7 +184,7 @@ class Sale
         $params = [];
 
         $conditions = [];
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $conditions[] = "user_id = ?";
             $params[] = $userId;
         }
@@ -206,7 +206,7 @@ class Sale
         $params = [];
 
         $conditions = [];
-        if ($userId && !Session::isAdmin()) {
+        if ($userId && Session::get('user_role') === 'empleado') {
             $conditions[] = "s.user_id = ?";
             $params[] = $userId;
         }
