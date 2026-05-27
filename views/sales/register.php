@@ -127,7 +127,7 @@
             <div class="row">
                 <div class="col-md-6 offset-md-6">
                     <table class="table table-sm">
-                        <tr>
+                        <tr class="d-none d-md-table-row">
                             <td class="fw-bold">Subtotal USD:</td>
                             <td class="text-end" id="subtotalDisplay">$ 0.00</td>
                         </tr>
