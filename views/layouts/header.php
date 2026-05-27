@@ -93,6 +93,14 @@
 
                 <?php if (Session::get('user_role') === 'empleado'): ?>
                 <li class="nav-item mt-2">
+                    <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Clientes</small>
+                </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/clients" class="nav-link <?= $controller === 'clients' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/clientes.png" class="sidebar-icon me-2">Clientes
+                    </a>
+                </li>
+                <li class="nav-item mt-2">
                     <small class="text-uppercase px-2 fw-bold" style="color:#2c3e50">Produccion</small>
                 </li>
                 <li class="nav-item">
