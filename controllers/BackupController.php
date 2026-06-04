@@ -86,4 +86,62 @@ class BackupController
         echo $sql;
         exit;
     }
+
+    public function restore()
+    {
+        Session::requireAdmin();
+        $backupDir = __DIR__ . '/../backups';
+        $params = $_GET['params'] ?? [];
+
+        // Determine source: uploaded file or existing backup
+        if (!empty($_FILES['backup_file']['tmp_name'])) {
+            $sql = file_get_contents($_FILES['backup_file']['tmp_name']);
+        } elseif (!empty($params[0])) {
+            $file = $backupDir . '/' . basename($params[0]);
+            if (!file_exists($file)) {
+                alert_error('Archivo de respaldo no encontrado');
+                redirect(BASE_URL . '/backup');
+            }
+            $sql = file_get_contents($file);
+        } else {
+            alert_error('No se selecciono ningun archivo');
+            redirect(BASE_URL . '/backup');
+        }
+
+        if (empty(trim($sql))) {
+            alert_error('El archivo esta vacio');
+            redirect(BASE_URL . '/backup');
+        }
+
+        $db = Database::getInstance();
+        $pdo = $db->getConnection();
+
+        try {
+            $pdo->exec("SET FOREIGN_KEY_CHECKS = 0");
+
+            $statements = explode(";\n", $sql);
+            $count = 0;
+            foreach ($statements as $stmt) {
+                $stmt = trim($stmt);
+                if (empty($stmt) || strpos($stmt, '--') === 0) continue;
+                try {
+                    $pdo->exec($stmt);
+                    $count++;
+                } catch (PDOException $e) {
+                    // Skip duplicate key errors and already-exists errors
+                    if (strpos($e->getMessage(), 'Duplicate') === false && strpos($e->getMessage(), 'already exists') === false) {
+                        throw $e;
+                    }
+                }
+            }
+
+            $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
+            alert_success("Restauracion completada. {$count} sentencias ejecutadas.");
+        } catch (Exception $e) {
+            $pdo->exec("SET FOREIGN_KEY_CHECKS = 1");
+            alert_error('Error durante la restauracion: ' . $e->getMessage());
+        }
+
+        redirect(BASE_URL . '/backup');
+    }
 }
