@@ -131,6 +131,11 @@
                         <img src="<?= BASE_URL ?>/imagen/usuarios.png" class="sidebar-icon me-2">Usuarios
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL ?>/backup" class="nav-link <?= $controller === 'backup' ? 'active' : '' ?>">
+                        <img src="<?= BASE_URL ?>/imagen/reportes.png" class="sidebar-icon me-2">Respaldo
+                    </a>
+                </li>
                 <?php endif; ?>
             </ul>
 

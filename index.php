@@ -42,6 +42,7 @@ $routes = [
     'users' => 'UserController',
     'employees' => 'EmployeeController',
     'finances' => 'FinanceController',
+    'backup' => 'BackupController',
 ];
 
 $actionMap = [
