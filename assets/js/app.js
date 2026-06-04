@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
     const toggleBtn = document.getElementById('sidebarToggle');
-    var deferredPrompt = null;
 
     function toggleSidebar() {
         sidebar.classList.toggle('show');
@@ -43,36 +42,5 @@ document.addEventListener('DOMContentLoaded', function () {
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function (el) {
         return new bootstrap.Tooltip(el);
-    });
-
-    window.addEventListener('beforeinstallprompt', function (e) {
-        e.preventDefault();
-        deferredPrompt = e;
-        showInstallButtons();
-    });
-
-    function showInstallButtons() {
-        var btns = document.querySelectorAll('#installAppBtn, #installAppBtnMobile');
-        btns.forEach(function(b) { b.style.display = ''; });
-    }
-
-    function hideInstallButtons() {
-        var btns = document.querySelectorAll('#installAppBtn, #installAppBtnMobile');
-        btns.forEach(function(b) { b.style.display = 'none'; });
-    }
-
-    document.addEventListener('click', function(e) {
-        var btn = e.target.closest('#installAppBtn, #installAppBtnMobile');
-        if (btn && deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(function () {
-                deferredPrompt = null;
-                hideInstallButtons();
-            });
-        }
-    });
-
-    window.addEventListener('appinstalled', function () {
-        hideInstallButtons();
     });
 });
